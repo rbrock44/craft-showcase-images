@@ -15,6 +15,8 @@ from it: a fix made in one belongs in all of them.
 - `site.json` - site + watermark settings: `title`, `url`, `description`, `projectNoun`,
   `photoNoun`, `directoryUrl`, `featured` (`"above"`/`"below"`/`"off"`: where the Featured group sits relative to Favorites; missing means `"above"`), `watermarkText`, `idPrefix`, `repo` (`rbrock44/craft-showcase-images`)
 - `project-list.json` - the picture list; image urls are root-relative `/images/<year>/[<slug>/]<name>.jpg`
+- `about.md` (optional) - the artist's About text in Markdown, photos as `![alt](images/about/<name>.jpg)`. The site build turns it into the About panel (raw HTML dropped, links only http(s)/mailto/site paths); no file hides the info button
+- `images/about/<name>.jpg` - About photos only: one file each, long edge <= 1200px, metadata stripped, q82, **not** watermarked, not in `project-list.json`; written by `add-images.mjs --about`
 - `images/<year>/<project-slug>/<name>.jpg|-mid.webp|-thumb.webp` - a project's pictures
 - `images/<year>/<name>.jpg|...` - loose pictures for that year, not in a project; in `project-list.json` each one's optional `after` names the project it's listed after on the site (none: before every project). `add-images.mjs` sets it to the year's newest project when the picture is added
 - `site.json` `shop` (off unless `enabled: true`): `currency`, optional `orderEmail`, `variants` (copy kinds by id, each `{ name, price, checkoutUrl? }`), `presets` (named lists of variant ids), `defaultPreset`. A picture's optional `sale`: `original` (`{ price, sold?, checkoutUrl? }`, always priced per picture), `copies` (missing/`true` = default preset, `false`, a preset name, or a list of preset names, variant ids and one-off `{ id, name, price }` variants), `copyPrices` (price overrides by variant id). Prices are whole currency units (`25` = $25), not cents. The site build validates all of it and fails naming the picture; full shape in README "Shop (Selling Work)". `add-images.mjs --original-price`/`--copies` set `sale` on new pictures only; the double-click import doesn't
@@ -34,6 +36,7 @@ from it: a fix made in one belongs in all of them.
 
 ```bash
 node scripts/add-images.mjs --year 2025 [--project "Name"] [--desc "..."] [--featured] [--original-price <dollars>] [--copies <preset-or-ids>] [--root <gallery>] [--data <json>] [--dry-run] <file-or-folder>...
+node scripts/add-images.mjs --about [--root <gallery>] [--dry-run] <file-or-folder>...
 node scripts/import.mjs [--folder <path>] [--yes] [--no-publish]
 node scripts/reveal-watermark.mjs <file> [out]
 powershell -ExecutionPolicy Bypass -File scripts/setup.ps1 -WhatIf
@@ -46,7 +49,8 @@ same from PowerShell or Git Bash. `--root` points add-images at another gallery 
 
 ## Rules
 
-- Never commit untouched originals. Only the three processed files per picture belong here.
+- Never commit untouched originals. Only the three processed files per picture belong here
+  (one file per About photo under `images/about/`).
   `.gitignore` blocks `originals/` and `*.orig.*`
 - Every published `.jpg` is: auto-oriented, long edge <= 1600px (never upscaled), metadata
   stripped, watermarked, JPEG quality 80, id in the JPEG comment. Low res on purpose so prints

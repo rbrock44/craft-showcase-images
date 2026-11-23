@@ -8,6 +8,7 @@
 - [How to Set Up the Folder](#-how-to-set-up-the-folder)
 - [Adding Descriptions](#-adding-descriptions)
 - [Featuring Work](#-featuring-work)
+- [About You](#-about-you)
 - [Selling Work](#-selling-work)
 - [If Something Goes Wrong](#-if-something-goes-wrong)
 - [First-Time Setup (Ryan Does This)](#-first-time-setup-ryan-does-this)
@@ -79,6 +80,18 @@ To make a text file: right-click inside the folder, choose **New → Text Docume
 The website's home page can show a **Featured** group with the work you're proudest of. To feature a project or a picture, tell Ryan which one. Importing doesn't feature anything by itself.
 
 For Ryan: add `--featured` when running `add-images.mjs`, or put `"featured": true` on the project or picture in `project-list.json`. `"featured"` in `site.json` moves the group above or below Favorites, or turns it off.
+
+---
+
+## 👋 About You
+
+The little **i** button at the top right of the website, next to the light/dark button, opens a few words about you, with photos of you or where you work. You write it; Ryan puts it up.
+
+- **Words:** write them anywhere (an email, a text, a note) and send them to Ryan. Plain paragraphs are perfect. They end up in the file `about.md` in this folder.
+- **Photos:** send Ryan the photos you want, and say what each one shows. They are made smaller and the hidden phone details (like where it was taken) are removed, but they don't get the copyright stamp your artwork gets.
+- **Changes:** send Ryan the new words any time.
+
+For Ryan: edit `about.md` (Markdown; README "About Page"), add photos with `node scripts/add-images.mjs --about <photo>` and paste the line it prints. Commit the change before the next double-click import; the import stops on changes outside `images/` and `project-list.json`.
 
 ---
 

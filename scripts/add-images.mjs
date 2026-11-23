@@ -11,6 +11,11 @@
  *   node scripts/add-images.mjs --year 2025 [--project "Barn Owl"] [--desc "..."] [--featured]
  *        [--original-price 300] [--copies large|none|<preset-or-id>,...]
  *        [--root <gallery folder>] [--data <path/to/project-list.json>] [--dry-run] <file-or-folder>...
+ *   node scripts/add-images.mjs --about [--root <gallery folder>] [--dry-run] <file-or-folder>...
+ *
+ * With --about each picture is a photo for the site's About panel (the artist, their studio) and only one
+ * file is written, with no watermark and nothing added to project-list.json:
+ *   about/<name>.jpg  long edge capped at 1200px, metadata (camera, location) stripped, quality 82
  *
  * Settings (watermark text, id prefix) come from <root>/site.json; root defaults to this repo.
  *
@@ -37,6 +42,10 @@ const MID_BOX = 1200;
 const MID_QUALITY = 80;
 const THUMB_WIDTH = 400;
 const THUMB_QUALITY = 75;
+// About photos show the artist, not their work, so they are only resized and stripped
+const ABOUT_FOLDER = 'about';
+const ABOUT_MAX_EDGE = 1200;
+const ABOUT_QUALITY = 82;
 
 // Watermark layers, all sized from markScale() so they scale with the image
 const VISIBLE = { size: 0.032, fill: 'rgba(255,255,255,0.60)', stroke: 'rgba(40,40,40,0.55)' };
@@ -47,6 +56,7 @@ const USAGE = `Usage:
   node scripts/add-images.mjs --year <yyyy> [--project "<name>"] [--desc "<text>"] [--featured]
        [--original-price <dollars>] [--copies <preset-or-ids>]
        [--root <gallery folder>] [--data <project-list.json>] [--dry-run] <file-or-folder>...
+  node scripts/add-images.mjs --about [--root <gallery folder>] [--dry-run] <file-or-folder>...
 
   --year      year the images belong to
   --project   project name; without it the images are loose photos for that year
@@ -59,6 +69,8 @@ const USAGE = `Usage:
               Without it pictures offer the shop's default preset
   --root      gallery folder holding site.json, project-list.json and images/ (default: this repo)
   --data      project-list.json to update instead of <root>/project-list.json
+  --about     photos for the site's About panel (you, your studio): resized into images/about/ without
+              a watermark and not listed in project-list.json; link them from about.md. No --year
   --dry-run   show what would happen without writing anything`;
 
 /** A problem with the input or settings, shown to the user without a stack trace. */
@@ -69,7 +81,7 @@ function fail(message) {
 }
 
 function parseArgs(argv) {
-  const options = { inputs: [], dryRun: false, featured: false };
+  const options = { inputs: [], dryRun: false, featured: false, about: false };
   const valued = {
     '--root': 'root', '--year': 'year', '--project': 'project', '--desc': 'desc', '--data': 'data',
     '--original-price': 'originalPrice', '--copies': 'copies',
@@ -81,6 +93,8 @@ function parseArgs(argv) {
       process.exit(0);
     } else if (arg === '--dry-run') {
       options.dryRun = true;
+    } else if (arg === '--about') {
+      options.about = true;
     } else if (arg === '--featured') {
       options.featured = true;
     } else if (valued[arg]) {
@@ -92,7 +106,8 @@ function parseArgs(argv) {
       options.inputs.push(arg);
     }
   }
-  if (!/^\d{4}$/.test(options.year ?? '')) fail(`--year must be a 4 digit year\n\n${USAGE}`);
+  if (options.about && (options.year !== undefined || options.project !== undefined)) fail('--about photos take no --year or --project');
+  if (!options.about && !/^\d{4}$/.test(options.year ?? '')) fail(`--year must be a 4 digit year\n\n${USAGE}`);
   if (options.project !== undefined && !slugify(options.project)) fail('--project needs letters or numbers');
   if (options.inputs.length === 0) fail(`no input files or folders given\n\n${USAGE}`);
   if (options.originalPrice !== undefined) {
@@ -425,9 +440,53 @@ export function mergeIntoData(data, { year, project, desc, images, featured = fa
   return added;
 }
 
+/** Where About photos go: images/about/ under the gallery root. */
+export function aboutDestination(repoRoot = REPO_ROOT) {
+  return { relativeDir: ABOUT_FOLDER, dir: path.join(repoRoot, IMAGES_FOLDER, ABOUT_FOLDER) };
+}
+
+/** Writes one About photo, resized and stripped but not watermarked. Returns the line that shows it in about.md. */
+export function processAboutImage({ source, name, destination, dryRun = false }) {
+  if (!dryRun) {
+    fs.mkdirSync(destination.dir, { recursive: true });
+    magick([
+      source + '[0]', '-auto-orient', '-resize', `${ABOUT_MAX_EDGE}x${ABOUT_MAX_EDGE}>`, '-strip',
+      '-background', 'white', '-alpha', 'remove', '-alpha', 'off', '-colorspace', 'sRGB',
+      '-quality', String(ABOUT_QUALITY), path.join(destination.dir, `${name}.jpg`),
+    ]);
+  }
+  return `![Describe the photo](${IMAGES_FOLDER}/${destination.relativeDir}/${name}.jpg)`;
+}
+
+function addAboutImages(options, root) {
+  const destination = aboutDestination(root);
+  const files = collectInputs(options.inputs);
+  if (files.length === 0) fail('nothing to process');
+  if (options.dryRun) console.log('Dry run: nothing will be written.');
+  console.log(`Destination: ${destination.dir}`);
+
+  const lines = [];
+  let skipped = 0;
+  for (const source of files) {
+    const name = imageName(source);
+    if (!name || lines.some((line) => line.endsWith(`/${name}.jpg)`)) || fs.existsSync(path.join(destination.dir, `${name}.jpg`))) {
+      console.log(`Skipping ${path.basename(source)}: ${name ? `${destination.relativeDir}/${name}.jpg already exists` : 'name has no letters or numbers'}`);
+      skipped++;
+      continue;
+    }
+    lines.push(processAboutImage({ source, name, destination, dryRun: options.dryRun }));
+    console.log(`${options.dryRun ? 'Would add' : 'Added'} ${destination.relativeDir}/${name}.jpg`);
+  }
+  if (lines.length > 0) {
+    console.log(`\nPut these lines in about.md where each photo should show, then describe it in the [ ]:\n  ${lines.join('\n  ')}\n`);
+  }
+  console.log(`Done: ${lines.length} ${options.dryRun ? 'to add' : 'added'}, ${skipped} skipped.`);
+}
+
 function main() {
   const options = parseArgs(process.argv.slice(2));
   const root = options.root ? path.resolve(options.root) : REPO_ROOT;
+  if (options.about) return addAboutImages(options, root);
   const settings = loadSite(root);
   checkCopies(options.copies, settings);
   const sale = saleFor(options);

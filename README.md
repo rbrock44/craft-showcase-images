@@ -9,6 +9,7 @@
   - [Folder Layout](#folder-layout)
   - [Double-Click Import](#double-click-import)
   - [Adding Images From the Command Line](#adding-images-from-the-command-line)
+  - [About Page](#about-page)
   - [Watermarks](#watermarks)
   - [Checking a Suspected Copy](#checking-a-suspected-copy)
   - [Deploying](#deploying)
@@ -42,7 +43,9 @@ Only processed, watermarked copies are ever published. Untouched originals stay 
 ```
 site.json                  site + watermark settings (the site build copies it to site.config.json)
 project-list.json          the picture list the site reads
+about.md                   optional: the artist's own words for the site's About panel
 images/
+├── about/                 photos about.md shows (resized, not watermarked)
 ├── 2026/
 │   ├── sample-sketches/   a project (folder = project name slugified)
 │   │   ├── owl.jpg        full copy (watermarked, long edge <= 1600px)
@@ -154,6 +157,19 @@ For the person adding pictures: put them in `Documents\To_Import`, double-click 
 3. Check the new entries in `project-list.json` (add `desc`/`cover` text if wanted)
 4. Commit and push; the [deploy](#deploying) rebuilds the site
 
+### About Page
+
+`about.md` is what the site's info button (top right, next to the light/dark toggle) opens: a few words from the artist about themselves, with photos. No `about.md`, no button.
+
+Why Markdown in its own file rather than a `site.json` key: it's plain text with paragraphs, so it's easy to edit (even on GitHub, which also previews it with its photos), and nothing has to be escaped as JSON.
+
+- Write paragraphs separated by a blank line; `# Heading`, `**bold**`, `*italic*`, `- list`, and `[links](https://example.com)` work
+- A photo is a line like `![What the photo shows](images/about/me.jpg)`; the text in `[ ]` is read aloud to people who can't see it
+- HTML is ignored, and links only work to `https://`, `mailto:` and the site's own pages
+- The site build (`craft-showcase`'s `fetch-gallery`) turns it into the page, so a change shows after the next deploy
+
+Adding a photo: `node scripts/add-images.mjs --about "C:\Users\rbroc\Downloads\me.jpg"` writes `images/about/me.jpg` and prints the line to paste into `about.md`. About photos are resized (long edge 1200px) and stripped of metadata, including the location a phone records, but **not watermarked**: they show the artist, not their work, and a copyright stamp across someone's face looks wrong. They aren't listed in `project-list.json`, so they never show in the gallery.
+
 ### Watermarks
 
 Every full copy gets three layers, all sized from the picture's short edge (or half the long edge, for very narrow pictures) so they scale with it:
@@ -202,7 +218,7 @@ The marks survive JPEG re-saves and modest resizing. Heavy cropping can cut some
 
   | Option | Meaning |
   |---|---|
-  | `--year <yyyy>` | year (required) |
+  | `--year <yyyy>` | year (required, except with `--about`) |
   | `--project "<name>"` | project name; leave off for loose pictures |
   | `--desc "<text>"` | desc of a new project, or of each loose picture |
   | `--featured` | mark the project, or each loose picture added, `"featured": true` (shown in the site's Featured group); never unmarks |
@@ -210,6 +226,7 @@ The marks survive JPEG re-saves and modest resizing. Heavy cropping can cut some
   | `--copies <list>` | each new picture's `sale.copies`: a preset (`large`), comma-separated presets / variant ids (`cards,print-8x10`), or `none`; checked against `site.json`'s shop |
   | `--root <folder>` | gallery folder with `site.json`, `project-list.json`, `images/` (default: this repo) |
   | `--data <path>` | JSON file to update instead of `<root>/project-list.json` |
+  | `--about` | photos for the [About page](#about-page) instead: written to `images/about/<name>.jpg` only (long edge <= 1200px, metadata stripped, no watermark), not listed in `project-list.json`; prints the `about.md` line for each. Takes no `--year` or `--project` |
   | `--dry-run` | print what would happen, write nothing |
 
 - EXAMPLE(S):
@@ -218,6 +235,7 @@ The marks survive JPEG re-saves and modest resizing. Heavy cropping can cut some
   - `node scripts/add-images.mjs --root ..\other-gallery-images --year 2025 "C:\Users\rbroc\Downloads\Samples"`
   - `node scripts/add-images.mjs --year 2025 --project "Barn Owl" --featured "C:\Users\rbroc\Downloads\Owl"`
   - `node scripts/add-images.mjs --year 2025 --project "Barn Owl" --original-price 250 --copies large "C:\Users\rbroc\Downloads\Owl"`
+  - `node scripts/add-images.mjs --about "C:\Users\rbroc\Downloads\me at the studio.jpg"`
 
 #### import.mjs
 - The [double-click import](#double-click-import), run by `Import Pictures.cmd`
@@ -247,7 +265,7 @@ The marks survive JPEG re-saves and modest resizing. Heavy cropping can cut some
 
 This repo is the template: start every new gallery from it.
 
-1. Copy this repo into a new folder **without** `images/` and `.git/`, and with `project-list.json` emptied to `{"projectsByYear": []}`
+1. Copy this repo into a new folder **without** `images/` and `.git/`, and with `project-list.json` emptied to `{"projectsByYear": []}`. Replace `about.md` with a short placeholder marked for them to rewrite (its sample photo isn't copied), or delete it to hide the About button until they have text
 2. Edit `site.json`: `title`, `url`, `description`, nouns, `watermarkText`, `idPrefix`, and `repo` (e.g. `rbrock44/<name>-images`)
 3. Rewrite the README's title, blurb and purpose for that person's site (it's their gallery, not the sample), swap the names in `HOW-TO-ADD-PICTURES.md` and `.github/copilot-instructions.md`, then `git init -b master`, commit, and push to a new **private** GitHub repo with that name
 4. On their PC, copy the folder over (USB or zip) and double-click `Setup.cmd`. It prints a public key; add it under the new repo's **Settings → Deploy keys → Add deploy key**, tick **Allow write access**, then have them run `Setup.cmd` again
