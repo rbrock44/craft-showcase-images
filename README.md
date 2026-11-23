@@ -81,6 +81,7 @@ Setup.cmd                  one-time PC setup
 - `watermarkText` - the text stamped on every picture
 - `idPrefix` - start of each picture's hidden id (`CS-1a2b3c4d`)
 - `repo` - this repo; `setup.ps1` names the deploy key, ssh alias and clone folder after it
+- `social` - optional links shown as icons under the light/dark button: `facebook`, `instagram` and `twitter` (full `https://` page addresses) and `email` (an address). Leave one blank (`""`) and its icon doesn't show
 - `shop` - selling copies and originals, off by default; see [Shop (Selling Work)](#shop-selling-work)
 
 Each picture entry in `project-list.json` is `{ name, desc, url, width, height }`, with `url` root-relative (`/images/2026/sample-sketches/owl.jpg`) and width/height the published `.jpg`'s size. A project, or a loose picture, with `"featured": true` is also listed in the site's Featured group; set it with `add-images.mjs --featured` or by hand.

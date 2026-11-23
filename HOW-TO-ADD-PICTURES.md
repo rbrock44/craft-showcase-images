@@ -9,6 +9,7 @@
 - [Adding Descriptions](#-adding-descriptions)
 - [Featuring Work](#-featuring-work)
 - [About You](#-about-you)
+- [Your Links](#-your-links)
 - [Selling Work](#-selling-work)
 - [If Something Goes Wrong](#-if-something-goes-wrong)
 - [First-Time Setup (Ryan Does This)](#-first-time-setup-ryan-does-this)
@@ -92,6 +93,14 @@ The little **i** button at the top right of the website, next to the light/dark 
 - **Changes:** send Ryan the new words any time.
 
 For Ryan: edit `about.md` (Markdown; README "About Page"), add photos with `node scripts/add-images.mjs --about <photo>` and paste the line it prints. Commit the change before the next double-click import; the import stops on changes outside `images/` and `project-list.json`.
+
+---
+
+## 🔗 Your Links
+
+The website can show small Facebook, Instagram, Twitter and email icons at the top right, under the light/dark button, so people can find you elsewhere. Send Ryan the links you want shown (your page addresses and the email to show). Only the ones you send appear.
+
+For Ryan: fill in `social` in `site.json`.
 
 ---
 

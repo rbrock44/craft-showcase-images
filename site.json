@@ -6,6 +6,12 @@
   "photoNoun": "piece",
   "directoryUrl": null,
   "featured": "above",
+  "social": {
+    "facebook": "https://www.facebook.com/example",
+    "instagram": "https://www.instagram.com/example",
+    "twitter": "https://twitter.com/example",
+    "email": "hello@example.com"
+  },
   "shop": {
     "enabled": false,
     "currency": "USD",
