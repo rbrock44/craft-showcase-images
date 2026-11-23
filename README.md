@@ -103,14 +103,19 @@ Off until `site.json`'s `shop.enabled` is `true`; with it off (or no `shop` at a
   "apiUrl": "",
   "publishableKey": "",
   "variants": {
+    "print-4x6": { "name": "4x6 print", "price": 10 },
     "print-5x7": { "name": "5x7 print", "price": 15 },
     "print-8x10": { "name": "8x10 print", "price": 25, "checkoutUrl": "" },
     "print-11x14": { "name": "11x14 print", "price": 40 },
     "canvas-16x20": { "name": "16x20 canvas", "price": 120 },
-    "card-pack-5": { "name": "Pack of 5 cards", "price": 12 }
+    "card-pack-5": { "name": "Pack of 5 cards", "price": 12 },
+    "sticker-3in": { "name": "3 inch sticker", "price": 4 },
+    "poster-11x17": { "name": "11x17 poster", "price": 30 },
+    "poster-18x24": { "name": "18x24 poster", "price": 45 },
+    "poster-24x36": { "name": "24x36 poster", "price": 65 }
   },
   "presets": {
-    "standard": ["print-5x7", "print-8x10"],
+    "standard": ["print-4x6", "print-5x7", "print-8x10", "sticker-3in", "poster-11x17", "poster-18x24", "poster-24x36"],
     "large": ["print-11x14", "canvas-16x20"],
     "cards": ["card-pack-5"]
   },
@@ -136,7 +141,7 @@ A picture's optional `sale` in `project-list.json` (project pictures and loose p
 ```json
 "sale": {
   "original": { "price": 300, "sold": false, "checkoutUrl": "" },
-  "copies": ["cards", "print-8x10", { "id": "sticker-3in", "name": "3 inch sticker", "price": 4 }],
+  "copies": ["cards", "print-8x10", { "id": "print-12x12", "name": "12x12 print", "price": 35 }],
   "copyPrices": { "print-8x10": 30 }
 }
 ```
@@ -146,7 +151,7 @@ A picture's optional `sale` in `project-list.json` (project pictures and loose p
 - `copyPrices` - this picture's price for a variant by id, instead of the standard one. A variant's `checkoutUrl` isn't used when its price is overridden here, since that link charges the standard price
 - A picture with no `sale` offers the default preset's copies once the shop is on
 
-The sample data has one of each: `sample-bold-wide` (original $300 for sale, default copies), `sample-outline-tall` (original $225 sold, `"large"` copies) and `sample-stamp` (a preset, a variant id and a one-off sticker, with the 8x10 at $30).
+The sample data has one of each: `sample-bold-wide` (original $300 for sale, default copies), `sample-outline-tall` (original $225 sold, `"large"` copies) and `sample-stamp` (a preset, a variant id and a one-off 12x12 print, with the 8x10 at $30).
 
 ### Double-Click Import
 

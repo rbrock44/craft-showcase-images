@@ -85,9 +85,9 @@
               "cards",
               "print-8x10",
               {
-                "id": "sticker-3in",
-                "name": "3 inch sticker",
-                "price": 4
+                "id": "print-12x12",
+                "name": "12x12 print",
+                "price": 35
               }
             ],
             "copyPrices": {

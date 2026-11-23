@@ -126,11 +126,11 @@ Prices are written in **dollars**, not cents: `25` means $25.
 
 So you don't have to list copies picture by picture, kinds of copies come in named groups called **presets**:
 
-- **standard** - 5x7 print and 8x10 print. Every picture offers these unless you say otherwise.
+- **standard** - 4x6, 5x7 and 8x10 prints, a 3 inch sticker, and 11x17, 18x24 and 24x36 posters. Every picture offers these unless you say otherwise.
 - **large** - 11x14 print and 16x20 canvas.
 - **cards** - pack of 5 cards.
 
-For any picture you can tell Ryan: "standard", "large", "no copies", a mix ("cards and the 8x10 print"), a different price for one copy, or something new just for that picture (like a 3 inch sticker for $4). New kinds of copies and new presets can be added any time.
+For any picture you can tell Ryan: "standard", "large", "no copies", a mix ("cards and the 8x10 print"), a different price for one copy, or something new just for that picture (like a 12x12 print for $35). New kinds of copies and new presets can be added any time.
 
 Importing doesn't put anything up for sale by itself. Tell Ryan which pictures and prices.
 

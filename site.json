@@ -20,6 +20,10 @@
     "apiUrl": "",
     "publishableKey": "",
     "variants": {
+      "print-4x6": {
+        "name": "4x6 print",
+        "price": 10
+      },
       "print-5x7": {
         "name": "5x7 print",
         "price": 15
@@ -39,12 +43,33 @@
       "card-pack-5": {
         "name": "Pack of 5 cards",
         "price": 12
+      },
+      "sticker-3in": {
+        "name": "3 inch sticker",
+        "price": 4
+      },
+      "poster-11x17": {
+        "name": "11x17 poster",
+        "price": 30
+      },
+      "poster-18x24": {
+        "name": "18x24 poster",
+        "price": 45
+      },
+      "poster-24x36": {
+        "name": "24x36 poster",
+        "price": 65
       }
     },
     "presets": {
       "standard": [
+        "print-4x6",
         "print-5x7",
-        "print-8x10"
+        "print-8x10",
+        "sticker-3in",
+        "poster-11x17",
+        "poster-18x24",
+        "poster-24x36"
       ],
       "large": [
         "print-11x14",
