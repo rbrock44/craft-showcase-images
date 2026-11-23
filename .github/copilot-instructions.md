@@ -16,7 +16,7 @@ from it: a fix made in one belongs in all of them.
   `photoNoun`, `directoryUrl`, `watermarkText`, `idPrefix`, `repo` (`rbrock44/craft-showcase-images`)
 - `project-list.json` - the picture list; image urls are root-relative `/images/<year>/[<slug>/]<name>.jpg`
 - `images/<year>/<project-slug>/<name>.jpg|-mid.webp|-thumb.webp` - a project's pictures
-- `images/<year>/<name>.jpg|...` - loose pictures for that year, not in a project
+- `images/<year>/<name>.jpg|...` - loose pictures for that year, not in a project; in `project-list.json` each one's optional `after` names the project it's listed after on the site (none: before every project). `add-images.mjs` sets it to the year's newest project when the picture is added
 - `scripts/add-images.mjs` - picture processing + JSON update; a CLI and a module of exported functions
 - `scripts/import.mjs` - double-click import from `Documents/To_Import` (run by `Import Pictures.cmd`);
   imports add-images.mjs's functions, never shells out to it

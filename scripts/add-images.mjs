@@ -362,10 +362,14 @@ export function mergeIntoData(data, { year, project, desc, images }) {
     target = yearEntry.images;
   }
 
+  // Loose photos are listed after the year's newest project at the time they're added, so the site
+  // keeps them where they came: photos, then projects, then more photos.
+  const after = target === yearEntry.images ? yearEntry.projects.at(-1)?.name : undefined;
+
   let added = 0;
   for (const image of images) {
     if (target.some((existing) => existing.url === image.url)) continue;
-    target.push(image);
+    target.push(after ? { ...image, after } : image);
     added++;
   }
   return added;
