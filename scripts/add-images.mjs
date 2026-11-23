@@ -9,6 +9,7 @@
  *
  * Usage:
  *   node scripts/add-images.mjs --year 2025 [--project "Barn Owl"] [--desc "..."] [--featured]
+ *        [--original-price 300] [--copies large|none|<preset-or-id>,...]
  *        [--root <gallery folder>] [--data <path/to/project-list.json>] [--dry-run] <file-or-folder>...
  *
  * Settings (watermark text, id prefix) come from <root>/site.json; root defaults to this repo.
@@ -44,12 +45,18 @@ const HIDDEN = { size: 0.022, fill: 'rgba(128,128,128,0.02)', minCopies: 3, maxC
 
 const USAGE = `Usage:
   node scripts/add-images.mjs --year <yyyy> [--project "<name>"] [--desc "<text>"] [--featured]
+       [--original-price <dollars>] [--copies <preset-or-ids>]
        [--root <gallery folder>] [--data <project-list.json>] [--dry-run] <file-or-folder>...
 
   --year      year the images belong to
   --project   project name; without it the images are loose photos for that year
   --desc      project description for a new project (or the image desc for loose photos)
   --featured  show the project (or the loose photos being added) in the site's Featured group
+  --original-price
+              put each original up for sale at this price, in whole dollars (300 is $300)
+  --copies    which copies each picture offers: a preset name from site.json's shop ("large"), several
+              preset names or variant ids separated by commas ("cards,print-8x10"), or "none".
+              Without it pictures offer the shop's default preset
   --root      gallery folder holding site.json, project-list.json and images/ (default: this repo)
   --data      project-list.json to update instead of <root>/project-list.json
   --dry-run   show what would happen without writing anything`;
@@ -63,7 +70,10 @@ function fail(message) {
 
 function parseArgs(argv) {
   const options = { inputs: [], dryRun: false, featured: false };
-  const valued = { '--root': 'root', '--year': 'year', '--project': 'project', '--desc': 'desc', '--data': 'data' };
+  const valued = {
+    '--root': 'root', '--year': 'year', '--project': 'project', '--desc': 'desc', '--data': 'data',
+    '--original-price': 'originalPrice', '--copies': 'copies',
+  };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     if (arg === '--help' || arg === '-h') {
@@ -85,7 +95,40 @@ function parseArgs(argv) {
   if (!/^\d{4}$/.test(options.year ?? '')) fail(`--year must be a 4 digit year\n\n${USAGE}`);
   if (options.project !== undefined && !slugify(options.project)) fail('--project needs letters or numbers');
   if (options.inputs.length === 0) fail(`no input files or folders given\n\n${USAGE}`);
+  if (options.originalPrice !== undefined) {
+    const price = Number(options.originalPrice);
+    if (options.originalPrice.trim() === '' || !Number.isFinite(price) || price < 0) fail('--original-price must be a price in dollars, like 300');
+    options.originalPrice = price;
+  }
+  if (options.copies !== undefined) options.copies = parseCopies(options.copies);
   return options;
+}
+
+/** --copies as project-list.json writes it: false for "none", one name, or a list of names. */
+export function parseCopies(value) {
+  const names = value.split(',').map((name) => name.trim()).filter((name) => name !== '');
+  if (names.length === 0) fail('--copies needs a preset name, variant ids, or "none"');
+  if (names.length === 1 && (names[0] === 'none' || names[0] === 'false')) return false;
+  return names.length === 1 ? names[0] : names;
+}
+
+/** Fails on a --copies name that isn't a preset or variant in site.json's shop. */
+export function checkCopies(copies, settings) {
+  if (copies === undefined || copies === false) return;
+  const shop = settings.shop ?? {};
+  const known = new Set([...Object.keys(shop.presets ?? {}), ...Object.keys(shop.variants ?? {})]);
+  for (const name of [copies].flat()) {
+    if (!known.has(name)) fail(`--copies "${name}" is not a preset or variant in site.json's shop (known: ${[...known].join(', ') || 'none'})`);
+  }
+}
+
+/** The sale entry for --original-price and --copies, or undefined when neither is given. */
+export function saleFor({ originalPrice, copies }) {
+  if (originalPrice === undefined && copies === undefined) return undefined;
+  const sale = {};
+  if (originalPrice !== undefined) sale.original = { price: originalPrice, sold: false };
+  if (copies !== undefined) sale.copies = copies;
+  return sale;
 }
 
 export function slugify(text) {
@@ -386,6 +429,8 @@ function main() {
   const options = parseArgs(process.argv.slice(2));
   const root = options.root ? path.resolve(options.root) : REPO_ROOT;
   const settings = loadSite(root);
+  checkCopies(options.copies, settings);
+  const sale = saleFor(options);
   const destination = destinationFor({ year: options.year, project: options.project, repoRoot: root });
   const dataPath = options.data ? path.resolve(options.data) : defaultDataPath(root);
   const data = readData(dataPath);
@@ -419,7 +464,7 @@ function main() {
       try {
         const desc = options.project !== undefined ? '' : options.desc ?? '';
         const { image, id } = processImage({ source, name, destination, settings, workDir: workDir.dir, desc, dryRun: options.dryRun });
-        images.push(image);
+        images.push(sale ? { ...image, sale } : image);
         console.log(`${options.dryRun ? 'Would add' : 'Added'} ${destination.relativeDir}/${name}.jpg (${image.width}x${image.height}, ${id})`);
       } catch (error) {
         console.error(`Failed ${path.basename(source)}: ${error.message}`);

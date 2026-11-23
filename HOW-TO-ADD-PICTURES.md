@@ -8,6 +8,7 @@
 - [How to Set Up the Folder](#-how-to-set-up-the-folder)
 - [Adding Descriptions](#-adding-descriptions)
 - [Featuring Work](#-featuring-work)
+- [Selling Work](#-selling-work)
 - [If Something Goes Wrong](#-if-something-goes-wrong)
 - [First-Time Setup (Ryan Does This)](#-first-time-setup-ryan-does-this)
 
@@ -78,6 +79,31 @@ To make a text file: right-click inside the folder, choose **New → Text Docume
 The website's home page can show a **Featured** group with the work you're proudest of. To feature a project or a picture, tell Ryan which one. Importing doesn't feature anything by itself.
 
 For Ryan: add `--featured` when running `add-images.mjs`, or put `"featured": true` on the project or picture in `project-list.json`. `"featured"` in `site.json` moves the group above or below Favorites, or turns it off.
+
+---
+
+## 💲 Selling Work
+
+The website can show prices for your work, but only once Ryan turns the shop on. Until then no prices show anywhere.
+
+Each picture can be sold two ways:
+
+- **The original** - the one you made. You pick its price for each picture, like $225 or $300. Once it sells, tell Ryan and it shows as **Sold**.
+- **Copies** - prints, cards and so on, as many as people want. Each kind has a standard price, like $15 for a 5x7 print or $25 for an 8x10 print.
+
+Prices are written in **dollars**, not cents: `25` means $25.
+
+So you don't have to list copies picture by picture, kinds of copies come in named groups called **presets**:
+
+- **standard** - 5x7 print and 8x10 print. Every picture offers these unless you say otherwise.
+- **large** - 11x14 print and 16x20 canvas.
+- **cards** - pack of 5 cards.
+
+For any picture you can tell Ryan: "standard", "large", "no copies", a mix ("cards and the 8x10 print"), a different price for one copy, or something new just for that picture (like a 3 inch sticker for $4). New kinds of copies and new presets can be added any time.
+
+Importing doesn't put anything up for sale by itself. Tell Ryan which pictures and prices.
+
+For Ryan: the shape is in README "Shop (Selling Work)". `add-images.mjs --original-price 250 --copies large` sets it on new pictures; otherwise edit `sale` in `project-list.json`.
 
 ---
 

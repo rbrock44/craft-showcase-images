@@ -17,6 +17,7 @@ from it: a fix made in one belongs in all of them.
 - `project-list.json` - the picture list; image urls are root-relative `/images/<year>/[<slug>/]<name>.jpg`
 - `images/<year>/<project-slug>/<name>.jpg|-mid.webp|-thumb.webp` - a project's pictures
 - `images/<year>/<name>.jpg|...` - loose pictures for that year, not in a project; in `project-list.json` each one's optional `after` names the project it's listed after on the site (none: before every project). `add-images.mjs` sets it to the year's newest project when the picture is added
+- `site.json` `shop` (off unless `enabled: true`): `currency`, optional `orderEmail`, `variants` (copy kinds by id, each `{ name, price, checkoutUrl? }`), `presets` (named lists of variant ids), `defaultPreset`. A picture's optional `sale`: `original` (`{ price, sold?, checkoutUrl? }`, always priced per picture), `copies` (missing/`true` = default preset, `false`, a preset name, or a list of preset names, variant ids and one-off `{ id, name, price }` variants), `copyPrices` (price overrides by variant id). Prices are whole currency units (`25` = $25), not cents. The site build validates all of it and fails naming the picture; full shape in README "Shop (Selling Work)". `add-images.mjs --original-price`/`--copies` set `sale` on new pictures only; the double-click import doesn't
 - `"featured": true` on a project or a loose picture lists it in the site's Featured group too; `add-images.mjs --featured` sets it (never unsets), the double-click import doesn't
 - `scripts/add-images.mjs` - picture processing + JSON update; a CLI and a module of exported functions
 - `scripts/import.mjs` - double-click import from `Documents/To_Import` (run by `Import Pictures.cmd`);
@@ -32,7 +33,7 @@ from it: a fix made in one belongs in all of them.
 ## Commands
 
 ```bash
-node scripts/add-images.mjs --year 2025 [--project "Name"] [--desc "..."] [--featured] [--root <gallery>] [--data <json>] [--dry-run] <file-or-folder>...
+node scripts/add-images.mjs --year 2025 [--project "Name"] [--desc "..."] [--featured] [--original-price <dollars>] [--copies <preset-or-ids>] [--root <gallery>] [--data <json>] [--dry-run] <file-or-folder>...
 node scripts/import.mjs [--folder <path>] [--yes] [--no-publish]
 node scripts/reveal-watermark.mjs <file> [out]
 powershell -ExecutionPolicy Bypass -File scripts/setup.ps1 -WhatIf

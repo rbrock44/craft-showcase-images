@@ -12,14 +12,27 @@
               "desc": "",
               "url": "/images/2026/sample-sketches/sample-bold-wide.jpg",
               "width": 1600,
-              "height": 1067
+              "height": 1067,
+              "sale": {
+                "original": {
+                  "price": 300,
+                  "sold": false
+                }
+              }
             },
             {
               "name": "sample-outline-tall",
               "desc": "",
               "url": "/images/2026/sample-sketches/sample-outline-tall.jpg",
               "width": 1200,
-              "height": 1600
+              "height": 1600,
+              "sale": {
+                "original": {
+                  "price": 225,
+                  "sold": true
+                },
+                "copies": "large"
+              }
             },
             {
               "name": "sample-sketch-border",
@@ -66,7 +79,21 @@
           "url": "/images/2025/sample-stamp.jpg",
           "width": 1500,
           "height": 1500,
-          "featured": true
+          "featured": true,
+          "sale": {
+            "copies": [
+              "cards",
+              "print-8x10",
+              {
+                "id": "sticker-3in",
+                "name": "3 inch sticker",
+                "price": 4
+              }
+            ],
+            "copyPrices": {
+              "print-8x10": 30
+            }
+          }
         }
       ]
     },

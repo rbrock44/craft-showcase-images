@@ -6,6 +6,47 @@
   "photoNoun": "piece",
   "directoryUrl": null,
   "featured": "above",
+  "shop": {
+    "enabled": false,
+    "currency": "USD",
+    "orderEmail": "",
+    "variants": {
+      "print-5x7": {
+        "name": "5x7 print",
+        "price": 15
+      },
+      "print-8x10": {
+        "name": "8x10 print",
+        "price": 25
+      },
+      "print-11x14": {
+        "name": "11x14 print",
+        "price": 40
+      },
+      "canvas-16x20": {
+        "name": "16x20 canvas",
+        "price": 120
+      },
+      "card-pack-5": {
+        "name": "Pack of 5 cards",
+        "price": 12
+      }
+    },
+    "presets": {
+      "standard": [
+        "print-5x7",
+        "print-8x10"
+      ],
+      "large": [
+        "print-11x14",
+        "canvas-16x20"
+      ],
+      "cards": [
+        "card-pack-5"
+      ]
+    },
+    "defaultPreset": "standard"
+  },
   "watermarkText": "Craft Showcase",
   "idPrefix": "CS",
   "repo": "rbrock44/craft-showcase-images"

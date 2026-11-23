@@ -78,8 +78,61 @@ Setup.cmd                  one-time PC setup
 - `watermarkText` - the text stamped on every picture
 - `idPrefix` - start of each picture's hidden id (`CS-1a2b3c4d`)
 - `repo` - this repo; `setup.ps1` names the deploy key, ssh alias and clone folder after it
+- `shop` - selling copies and originals, off by default; see [Shop (Selling Work)](#shop-selling-work)
 
 Each picture entry in `project-list.json` is `{ name, desc, url, width, height }`, with `url` root-relative (`/images/2026/sample-sketches/owl.jpg`) and width/height the published `.jpg`'s size. A project, or a loose picture, with `"featured": true` is also listed in the site's Featured group; set it with `add-images.mjs --featured` or by hand.
+
+### Shop (Selling Work)
+
+Off until `site.json`'s `shop.enabled` is `true`; with it off (or no `shop` at all) the site shows no prices anywhere. The site build (`craft-showcase`'s `fetch-gallery`) checks the shop settings and every picture's `sale` either way and stops with a message naming the picture on any mistake, like an unknown preset or an original with no price.
+
+**Prices are whole dollars** (in `currency`, default `USD`), not cents: `25` is $25, `12.5` is $12.50.
+
+`site.json`'s `shop`:
+
+```json
+"shop": {
+  "enabled": false,
+  "currency": "USD",
+  "orderEmail": "",
+  "variants": {
+    "print-5x7": { "name": "5x7 print", "price": 15 },
+    "print-8x10": { "name": "8x10 print", "price": 25, "checkoutUrl": "" },
+    "print-11x14": { "name": "11x14 print", "price": 40 },
+    "canvas-16x20": { "name": "16x20 canvas", "price": 120 },
+    "card-pack-5": { "name": "Pack of 5 cards", "price": 12 }
+  },
+  "presets": {
+    "standard": ["print-5x7", "print-8x10"],
+    "large": ["print-11x14", "canvas-16x20"],
+    "cards": ["card-pack-5"]
+  },
+  "defaultPreset": "standard"
+}
+```
+
+- `variants` - every kind of copy that can be ordered, by id, each with its standard price. Ids are lowercase letters, numbers and dashes; keep them stable (payment links get matched to them later). `original` is reserved
+- `presets` - named lists of variant ids, so a picture can say `"large"` instead of listing variants. A preset name can't also be a variant id
+- `defaultPreset` - what a picture offers when it says nothing about copies (missing: every variant)
+- `orderEmail` - optional; when set each option gets an **Ask to order** email link prefilled with the site, the picture, its year and project, and the option. Without it the site shows the prices and "Ordering coming soon"
+- `checkoutUrl` - optional payment link (e.g. a Stripe Payment Link) on a variant or an original; when set the option shows **Buy** and links there, with `?client_reference_id=<year>_<project-slug>_<name>` added so the payment says which picture. Empty means none
+
+A picture's optional `sale` in `project-list.json` (project pictures and loose pictures alike):
+
+```json
+"sale": {
+  "original": { "price": 300, "sold": false, "checkoutUrl": "" },
+  "copies": ["cards", "print-8x10", { "id": "sticker-3in", "name": "3 inch sticker", "price": 4 }],
+  "copyPrices": { "print-8x10": 30 }
+}
+```
+
+- `original` - the one of a kind piece, always priced per picture by the artist (there is no site-wide original price); leave it out when it's not for sale. `"sold": true` keeps it listed as Sold, with its price, and no way to order it
+- `copies` - missing or `true`: the default preset. `false`: no copies. A preset name: `"large"`. Or a list mixing preset names, variant ids and one-off variants (`{ id, name, price, checkoutUrl? }`) only this picture has; a repeated id counts once, where it's first listed
+- `copyPrices` - this picture's price for a variant by id, instead of the standard one. A variant's `checkoutUrl` isn't used when its price is overridden here, since that link charges the standard price
+- A picture with no `sale` offers the default preset's copies once the shop is on
+
+The sample data has one of each: `sample-bold-wide` (original $300 for sale, default copies), `sample-outline-tall` (original $225 sold, `"large"` copies) and `sample-stamp` (a preset, a variant id and a one-off sticker, with the 8x10 at $30).
 
 ### Double-Click Import
 
@@ -153,6 +206,8 @@ The marks survive JPEG re-saves and modest resizing. Heavy cropping can cut some
   | `--project "<name>"` | project name; leave off for loose pictures |
   | `--desc "<text>"` | desc of a new project, or of each loose picture |
   | `--featured` | mark the project, or each loose picture added, `"featured": true` (shown in the site's Featured group); never unmarks |
+  | `--original-price <dollars>` | put each new picture's original up for sale at this price (`"sale": { "original": { "price": 300, "sold": false } }`) |
+  | `--copies <list>` | each new picture's `sale.copies`: a preset (`large`), comma-separated presets / variant ids (`cards,print-8x10`), or `none`; checked against `site.json`'s shop |
   | `--root <folder>` | gallery folder with `site.json`, `project-list.json`, `images/` (default: this repo) |
   | `--data <path>` | JSON file to update instead of `<root>/project-list.json` |
   | `--dry-run` | print what would happen, write nothing |
@@ -162,6 +217,7 @@ The marks survive JPEG re-saves and modest resizing. Heavy cropping can cut some
   - `node scripts/add-images.mjs --year 2025 "C:\Users\rbroc\Downloads\sketch.jpg"`
   - `node scripts/add-images.mjs --root ..\other-gallery-images --year 2025 "C:\Users\rbroc\Downloads\Samples"`
   - `node scripts/add-images.mjs --year 2025 --project "Barn Owl" --featured "C:\Users\rbroc\Downloads\Owl"`
+  - `node scripts/add-images.mjs --year 2025 --project "Barn Owl" --original-price 250 --copies large "C:\Users\rbroc\Downloads\Owl"`
 
 #### import.mjs
 - The [double-click import](#double-click-import), run by `Import Pictures.cmd`
