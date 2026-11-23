@@ -44,6 +44,7 @@ Only processed, watermarked copies are ever published. Untouched originals stay 
 site.json                  site + watermark settings (the site build copies it to site.config.json)
 project-list.json          the picture list the site reads
 about.md                   optional: the artist's own words for the site's About panel
+icons/                     the site's tab and home screen icons (favicon.ico, apple-touch-icon.png), from make-icons.mjs
 images/
 ├── about/                 photos about.md shows (resized, not watermarked)
 ├── 2026/
@@ -157,6 +158,17 @@ For the person adding pictures: put them in `Documents\To_Import`, double-click 
    - `node scripts/add-images.mjs --year 2025 --project "Barn Owl" --desc "Pencil study of a barn owl" "C:\Users\rbroc\Downloads\Owl"`
 3. Check the new entries in `project-list.json` (add `desc`/`cover` text if wanted)
 4. Commit and push; the [deploy](#deploying) rebuilds the site
+
+### Site Icons
+
+`icons/favicon.ico` (browser tab) and `icons/apple-touch-icon.png` (phone home screen) are this site's own icons; the site
+build copies them to the site root, and a gallery without them gets craft-showcase's defaults. Make them from a few
+letters or a picture (needs ImageMagick, like add-images):
+
+- `node scripts/make-icons.mjs --text "CS"` - letters on a rounded square (`--bg`/`--fg` colors, default terracotta and cream; `--font`, default Georgia-Bold)
+- `node scripts/make-icons.mjs --image "C:\Users\rbroc\Downloads\logo.png"` - a picture, cropped square from the middle
+
+Commit both files; the new icon shows after the next deploy (browsers may keep the old one cached for a while).
 
 ### About Page
 

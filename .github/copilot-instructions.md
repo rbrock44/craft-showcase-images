@@ -16,6 +16,7 @@ from it: a fix made in one belongs in all of them.
   `photoNoun`, `directoryUrl`, `featured` (`"above"`/`"below"`/`"off"`: where the Featured group sits relative to Favorites; missing means `"above"`), `watermarkText`, `idPrefix`, `repo` (`rbrock44/craft-showcase-images`)
 - `project-list.json` - the picture list; image urls are root-relative `/images/<year>/[<slug>/]<name>.jpg`
 - `about.md` (optional) - the artist's About text in Markdown, photos as `![alt](images/about/<name>.jpg)`. The site build turns it into the About panel (raw HTML dropped, links only http(s)/mailto/site paths); no file hides the info button
+- `icons/favicon.ico`, `icons/apple-touch-icon.png` - the site's own icons, made by `scripts/make-icons.mjs` (`--text` or `--image`); craft-showcase's fetch-gallery copies them to the site root, else uses its defaults
 - `images/about/<name>.jpg` - About photos only: one file each, long edge <= 1200px, metadata stripped, q82, **not** watermarked, not in `project-list.json`; written by `add-images.mjs --about`
 - `images/<year>/<project-slug>/<name>.jpg|-mid.webp|-thumb.webp` - a project's pictures
 - `images/<year>/<name>.jpg|...` - loose pictures for that year, not in a project; in `project-list.json` each one's optional `after` names the project it's listed after on the site (none: before every project). `add-images.mjs` sets it to the year's newest project when the picture is added

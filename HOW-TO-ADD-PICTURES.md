@@ -10,6 +10,7 @@
 - [Featuring Work](#-featuring-work)
 - [About You](#-about-you)
 - [Your Links](#-your-links)
+- [Your Icon](#-your-icon)
 - [Selling Work](#-selling-work)
 - [If Something Goes Wrong](#-if-something-goes-wrong)
 - [First-Time Setup (Ryan Does This)](#-first-time-setup-ryan-does-this)
@@ -101,6 +102,14 @@ For Ryan: edit `about.md` (Markdown; README "About Page"), add photos with `node
 The website can show small Facebook, Instagram, Twitter and email icons at the top right, under the light/dark button, so people can find you elsewhere. Send Ryan the links you want shown (your page addresses and the email to show). Only the ones you send appear.
 
 For Ryan: fill in `social` in `site.json`.
+
+---
+
+## 🖼 Your Icon
+
+The small picture in the browser tab (and on a phone's home screen if someone saves the site) is yours: by default your initials on a colored square. Want different letters, colors, or your logo? Tell Ryan.
+
+For Ryan: `node scripts/make-icons.mjs --text "..."` or `--image <logo>`, then commit `icons/`.
 
 ---
 
