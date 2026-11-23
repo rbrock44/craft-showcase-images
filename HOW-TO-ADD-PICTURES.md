@@ -124,6 +124,8 @@ Each picture can be sold two ways:
 
 Prices are written in **dollars**, not cents: `25` means $25.
 
+Shipping is charged **once per order**, not per picture: $8, or $15 if a poster is in the order.
+
 So you don't have to list copies picture by picture, kinds of copies come in named groups called **presets**:
 
 - **standard** - 4x6, 5x7 and 8x10 prints, a 3 inch sticker, and 11x17, 18x24 and 24x36 posters. Every picture offers these unless you say otherwise.

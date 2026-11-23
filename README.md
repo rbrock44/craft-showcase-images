@@ -102,6 +102,7 @@ Off until `site.json`'s `shop.enabled` is `true`; with it off (or no `shop` at a
   "orderEmail": "",
   "apiUrl": "",
   "publishableKey": "",
+  "shipping": { "standard": 8, "oversize": 15 },
   "variants": {
     "print-4x6": { "name": "4x6 print", "price": 10 },
     "print-5x7": { "name": "5x7 print", "price": 15 },
@@ -110,9 +111,9 @@ Off until `site.json`'s `shop.enabled` is `true`; with it off (or no `shop` at a
     "canvas-16x20": { "name": "16x20 canvas", "price": 120 },
     "card-pack-5": { "name": "Pack of 5 cards", "price": 12 },
     "sticker-3in": { "name": "3 inch sticker", "price": 4 },
-    "poster-11x17": { "name": "11x17 poster", "price": 30 },
-    "poster-18x24": { "name": "18x24 poster", "price": 45 },
-    "poster-24x36": { "name": "24x36 poster", "price": 65 }
+    "poster-11x17": { "name": "11x17 poster", "price": 30, "oversize": true },
+    "poster-18x24": { "name": "18x24 poster", "price": 45, "oversize": true },
+    "poster-24x36": { "name": "24x36 poster", "price": 65, "oversize": true }
   },
   "presets": {
     "standard": ["print-4x6", "print-5x7", "print-8x10", "sticker-3in", "poster-11x17", "poster-18x24", "poster-24x36"],
@@ -124,6 +125,7 @@ Off until `site.json`'s `shop.enabled` is `true`; with it off (or no `shop` at a
 ```
 
 - `variants` - every kind of copy that can be ordered, by id, each with its standard price. Ids are lowercase letters, numbers and dashes; keep them stable (payment links get matched to them later). `original` is reserved
+- `oversize` - optional `true` on a variant (posters) or an original: it ships at the higher shipping rate
 - `presets` - named lists of variant ids, so a picture can say `"large"` instead of listing variants. A preset name can't also be a variant id
 - `defaultPreset` - what a picture offers when it says nothing about copies (missing: every variant)
 - `orderEmail` - optional; when set each option gets an **Ask to order** email link prefilled with the site, the picture, its year and project, and the option. Without it the site shows the prices and "Ordering coming soon"
@@ -132,6 +134,7 @@ Off until `site.json`'s `shop.enabled` is `true`; with it off (or no `shop` at a
   - `GET <apiUrl>/availability?pictures=<key>,<key>` -> `{ "<key>": { "original": true|false } }`: asked when a piece with an original opens, when the cart opens and before checkout; a sold original shows **Sold** and leaves the cart
   - `POST <apiUrl>/checkout` with `{ site, publishableKey?, items: [{ picture, offer, quantity }] }` -> `{ "url": "https://..." }` (the payment page), or `409 { "unavailable": [{ picture, offer }] }` when something sold meanwhile
   - It must look prices and availability up itself (never trust the browser) and sell an original once
+- `shipping` - optional, charged **once per order** however many pieces are in it: one price (`8`), or `{ "standard": 8, "oversize": 15 }` to charge `oversize` instead when anything in the order is oversize (a poster). The cart shows it with the total; the backend adds the same charge itself. Missing: shipping is worked out at checkout. Shipping by the buyer's location isn't handled yet (planned)
 - `publishableKey` - optional browser-safe key passed to the backend (e.g. Stripe's `pk_...`)
 - **Secret keys never go here.** `site.json` is published with the site. Payment secret keys, webhook secrets and API tokens go in the backend Worker's secrets (`npx wrangler secret put STRIPE_SECRET_KEY --name <worker>`). The build stops if `site.json` has `apiKey`, `secretKey`, `token` or `apiToken`, or a `publishableKey` that looks secret (`sk_`, `rk_`, `whsec_`)
 - `checkoutUrl` - optional payment link (e.g. a Stripe Payment Link) on a variant or an original; when set the option shows **Buy** and links there, with `?client_reference_id=<year>_<project-slug>_<name>` added so the payment says which picture. Empty means none

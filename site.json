@@ -19,6 +19,10 @@
     "orderEmail": "",
     "apiUrl": "",
     "publishableKey": "",
+    "shipping": {
+      "standard": 8,
+      "oversize": 15
+    },
     "variants": {
       "print-4x6": {
         "name": "4x6 print",
@@ -50,15 +54,18 @@
       },
       "poster-11x17": {
         "name": "11x17 poster",
-        "price": 30
+        "price": 30,
+        "oversize": true
       },
       "poster-18x24": {
         "name": "18x24 poster",
-        "price": 45
+        "price": 45,
+        "oversize": true
       },
       "poster-24x36": {
         "name": "24x36 poster",
-        "price": 65
+        "price": 65,
+        "oversize": true
       }
     },
     "presets": {
