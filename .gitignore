@@ -1,0 +1,20 @@
+# Untouched originals never get published, only the watermarked copies
+originals/
+*.orig.*
+
+# Secrets
+.env*
+
+# Temp and editor files
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+node_modules/

@@ -1,0 +1,22 @@
+name: Deploy
+
+# The site (craft-showcase) is built on Cloudflare Pages and clones this gallery at build time,
+# so a push here only needs to ask Cloudflare for a fresh build.
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Cloudflare Pages build
+        env:
+          HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::notice::CLOUDFLARE_DEPLOY_HOOK secret is not set, skipping the deploy"
+            exit 0
+          fi
+          curl -fsS -X POST "$HOOK"
