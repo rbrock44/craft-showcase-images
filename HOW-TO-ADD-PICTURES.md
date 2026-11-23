@@ -168,3 +168,17 @@ Done once per computer. The person adding pictures doesn't need a GitHub account
 6. Delete the copied folder. The shortcut points at `Documents\craft-showcase-images`.
 
 To check without changing anything: `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1 -WhatIf`
+
+### Keeping the Key Safe
+
+The key on their PC can change this gallery, and every change rebuilds the live site. So:
+
+- That PC's Windows account should have a password, so the key isn't open to whoever sits down at it.
+- On GitHub, **rbrock44/craft-showcase-images → Watch → All Activity**, so every upload sends Ryan an email and a change nobody expected gets noticed.
+
+**If the PC is lost, sold, or might be hacked:**
+
+1. Remove its key: **rbrock44/craft-showcase-images → Settings → Deploy keys → Delete**. From then on that PC can't change anything.
+2. If someone already pushed bad changes, put the site back right away: Cloudflare → **Workers & Pages → the site → Deployments**, pick the last good one → **Rollback**.
+3. Undo the bad commits in the repo (`git revert <commit>`, then push). The push rebuilds the site from the fixed gallery.
+4. When there's a safe PC again, run First-Time Setup on it for a new key.
