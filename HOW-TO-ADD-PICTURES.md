@@ -6,7 +6,7 @@
 
 - [Adding Pictures](#-adding-pictures)
 - [How to Set Up the Folder](#-how-to-set-up-the-folder)
-- [Adding Descriptions](#-adding-descriptions)
+- [Adding Titles and Descriptions](#-adding-titles-and-descriptions)
 - [Featuring Work](#-featuring-work)
 - [About You](#-about-you)
 - [Your Links](#-your-links)
@@ -66,12 +66,13 @@ Tips:
 
 ---
 
-## ✏ Adding Descriptions
+## ✏ Adding Titles and Descriptions
 
-Descriptions are optional.
+Titles and descriptions are optional.
 
+- **A picture's title** (the name of the piece, like *Barn Owl*): make a text file with the **same name as the picture**, like `card-1.txt` for `card-1.jpg`, and type the title on the **first line**. It shows above the picture and under its small copy on the website, and in the cart.
+- **A picture's description:** in that same text file, on the lines **after** the title.
 - **For a project:** inside the project folder, make a text file named `description.txt` and type the description in it.
-- **For one picture:** make a text file with the **same name as the picture**, like `card-1.txt` for `card-1.jpg`.
 
 To make a text file: right-click inside the folder, choose **New → Text Document**, type the name, then open it and type.
 

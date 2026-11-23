@@ -8,7 +8,7 @@
  *   <name>-thumb.webp 400px wide, quality 75, made from the watermarked full copy
  *
  * Usage:
- *   node scripts/add-images.mjs --year 2025 [--project "Barn Owl"] [--desc "..."] [--featured]
+ *   node scripts/add-images.mjs --year 2025 [--project "Barn Owl"] [--title "..."] [--desc "..."] [--featured]
  *        [--original-price 300] [--copies large|none|<preset-or-id>,...]
  *        [--root <gallery folder>] [--data <path/to/project-list.json>] [--dry-run] <file-or-folder>...
  *   node scripts/add-images.mjs --about [--root <gallery folder>] [--dry-run] <file-or-folder>...
@@ -53,13 +53,14 @@ const TILED = { size: 0.045, fill: 'rgba(110,110,110,0.06)', angle: -30 };
 const HIDDEN = { size: 0.022, fill: 'rgba(128,128,128,0.02)', minCopies: 3, maxCopies: 5 };
 
 const USAGE = `Usage:
-  node scripts/add-images.mjs --year <yyyy> [--project "<name>"] [--desc "<text>"] [--featured]
+  node scripts/add-images.mjs --year <yyyy> [--project "<name>"] [--title "<text>"] [--desc "<text>"] [--featured]
        [--original-price <dollars>] [--copies <preset-or-ids>]
        [--root <gallery folder>] [--data <project-list.json>] [--dry-run] <file-or-folder>...
   node scripts/add-images.mjs --about [--root <gallery folder>] [--dry-run] <file-or-folder>...
 
   --year      year the images belong to
   --project   project name; without it the images are loose photos for that year
+  --title     the piece's name, like "Barn Owl", shown with the picture (one picture at a time)
   --desc      project description for a new project (or the image desc for loose photos)
   --featured  show the project (or the loose photos being added) in the site's Featured group
   --original-price
@@ -83,7 +84,7 @@ function fail(message) {
 function parseArgs(argv) {
   const options = { inputs: [], dryRun: false, featured: false, about: false };
   const valued = {
-    '--root': 'root', '--year': 'year', '--project': 'project', '--desc': 'desc', '--data': 'data',
+    '--root': 'root', '--year': 'year', '--project': 'project', '--desc': 'desc', '--data': 'data', '--title': 'title',
     '--original-price': 'originalPrice', '--copies': 'copies',
   };
   for (let i = 0; i < argv.length; i++) {
@@ -116,6 +117,7 @@ function parseArgs(argv) {
     options.originalPrice = price;
   }
   if (options.copies !== undefined) options.copies = parseCopies(options.copies);
+  if (options.title !== undefined && options.title.trim() === '') fail('--title needs some text');
   return options;
 }
 
@@ -225,7 +227,7 @@ export function makeWorkDir() {
  * the files written. With dryRun, only works out the size. Throws on failure, after removing
  * any of its own files it had already written.
  */
-export function processImage({ source, name, destination, settings, workDir, desc = '', dryRun = false }) {
+export function processImage({ source, name, destination, settings, workDir, title = '', desc = '', dryRun = false }) {
   const id = imageId(source, settings);
   const full = path.join(destination.dir, `${name}.jpg`);
   const mid = path.join(destination.dir, `${name}-mid.webp`);
@@ -245,7 +247,7 @@ export function processImage({ source, name, destination, settings, workDir, des
       throw error;
     }
   }
-  const image = { name, desc, url: `${IMAGES_URL}/${destination.relativeDir}/${name}.jpg`, width: size.width, height: size.height };
+  const image = { name, ...(title.trim() ? { title: title.trim() } : {}), desc, url: `${IMAGES_URL}/${destination.relativeDir}/${name}.jpg`, width: size.width, height: size.height };
   return { image, id, files };
 }
 
@@ -502,6 +504,7 @@ function main() {
 
   const workDir = makeWorkDir();
   const images = [];
+  if (options.title !== undefined && files.length > 1) fail('--title names one piece: give one picture at a time');
   const seen = new Set();
   let skipped = 0;
   let failed = 0;
@@ -522,7 +525,7 @@ function main() {
 
       try {
         const desc = options.project !== undefined ? '' : options.desc ?? '';
-        const { image, id } = processImage({ source, name, destination, settings, workDir: workDir.dir, desc, dryRun: options.dryRun });
+        const { image, id } = processImage({ source, name, destination, settings, workDir: workDir.dir, title: options.title ?? '', desc, dryRun: options.dryRun });
         images.push(sale ? { ...image, sale } : image);
         console.log(`${options.dryRun ? 'Would add' : 'Added'} ${destination.relativeDir}/${name}.jpg (${image.width}x${image.height}, ${id})`);
       } catch (error) {

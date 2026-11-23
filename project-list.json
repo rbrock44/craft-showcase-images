@@ -9,6 +9,7 @@
           "images": [
             {
               "name": "sample-bold-wide",
+              "title": "Sample 001",
               "desc": "",
               "url": "/images/2026/sample-sketches/sample-bold-wide.jpg",
               "width": 1600,
@@ -22,6 +23,7 @@
             },
             {
               "name": "sample-outline-tall",
+              "title": "Sample 002",
               "desc": "",
               "url": "/images/2026/sample-sketches/sample-outline-tall.jpg",
               "width": 1200,
@@ -36,6 +38,7 @@
             },
             {
               "name": "sample-sketch-border",
+              "title": "Sample 003",
               "desc": "",
               "url": "/images/2026/sample-sketches/sample-sketch-border.jpg",
               "width": 1600,
@@ -53,6 +56,7 @@
       "images": [
         {
           "name": "sample-narrow",
+          "title": "Sample 004",
           "desc": "",
           "url": "/images/2026/sample-narrow.jpg",
           "width": 457,
@@ -60,6 +64,7 @@
         },
         {
           "name": "sample-script",
+          "title": "Sample 005",
           "desc": "",
           "url": "/images/2026/sample-script.jpg",
           "width": 1600,
@@ -74,6 +79,7 @@
       "images": [
         {
           "name": "sample-sizes-wide",
+          "title": "Sample 006",
           "desc": "",
           "url": "/images/2025/sample-sizes-wide.jpg",
           "width": 1600,
@@ -81,6 +87,7 @@
         },
         {
           "name": "sample-stamp",
+          "title": "Sample 007",
           "desc": "",
           "url": "/images/2025/sample-stamp.jpg",
           "width": 1500,
@@ -113,6 +120,7 @@
           "images": [
             {
               "name": "sample-study-small",
+              "title": "Sample 008",
               "desc": "",
               "url": "/images/2024/sample-studies/sample-study-small.jpg",
               "width": 1200,
@@ -120,10 +128,17 @@
             },
             {
               "name": "sample-study-tall",
+              "title": "Sample 009",
               "desc": "",
               "url": "/images/2024/sample-studies/sample-study-tall.jpg",
               "width": 1200,
-              "height": 1600
+              "height": 1600,
+              "sale": {
+                "original": {
+                  "price": 200,
+                  "sold": true
+                }
+              }
             }
           ]
         }

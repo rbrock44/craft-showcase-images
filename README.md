@@ -85,7 +85,7 @@ Setup.cmd                  one-time PC setup
 - `social` - optional links shown as icons under the light/dark button: `facebook`, `instagram` and `twitter` (full `https://` page addresses) and `email` (an address). Leave one blank (`""`) and its icon doesn't show
 - `shop` - selling copies and originals, off by default; see [Shop (Selling Work)](#shop-selling-work)
 
-Each picture entry in `project-list.json` is `{ name, desc, url, width, height }`, with `url` root-relative (`/images/2026/sample-sketches/owl.jpg`) and width/height the published `.jpg`'s size. A project, or a loose picture, with `"featured": true` is also listed in the site's Featured group; set it with `add-images.mjs --featured` or by hand.
+Each picture entry in `project-list.json` is `{ name, title?, desc, url, width, height }`: `title` is the piece's own name ("Barn Owl"), shown above the picture, under its thumbnail, in the cart, order emails, search and alt text (missing or blank: none; the sample pictures are titled Sample 001 to 009). With `url` root-relative (`/images/2026/sample-sketches/owl.jpg`) and width/height the published `.jpg`'s size. A project, or a loose picture, with `"featured": true` is also listed in the site's Featured group; set it with `add-images.mjs --featured` or by hand.
 
 ### Shop (Selling Work)
 
@@ -155,7 +155,7 @@ A picture's optional `sale` in `project-list.json` (project pictures and loose p
 - `copyPrices` - this picture's price for a variant by id, instead of the standard one. A variant's `checkoutUrl` isn't used when its price is overridden here, since that link charges the standard price
 - A picture with no `sale` offers the default preset's copies once the shop is on
 
-The sample data has one of each: `sample-bold-wide` (original $300 for sale, default copies), `sample-outline-tall` (original $225 sold, `"large"` copies), `sample-sketch-border` (original $450, `"original-only"`, no copies) and `sample-stamp` (a preset, a variant id and a one-off 12x12 print, with the 8x10 at $30).
+The sample data has one of each: `sample-bold-wide` (original $300 for sale, default copies), `sample-outline-tall` (original $225 sold, `"large"` copies), `sample-study-tall` (original $200 sold, default copies), `sample-sketch-border` (original $450, `"original-only"`, no copies) and `sample-stamp` (a preset, a variant id and a one-off 12x12 print, with the 8x10 at $30).
 
 ### Double-Click Import
 
@@ -174,7 +174,7 @@ For the person adding pictures: put them in `Documents\To_Import`, double-click 
 1. Keep the originals somewhere outside this repo
 2. Run [add-images](#add-imagesmjs) for each project (or for the year's loose pictures)
    - `node scripts/add-images.mjs --year 2025 --project "Barn Owl" --desc "Pencil study of a barn owl" "C:\Users\rbroc\Downloads\Owl"`
-3. Check the new entries in `project-list.json` (add `desc`/`cover` text if wanted)
+3. Check the new entries in `project-list.json` (add `title`/`desc`/`cover` text if wanted)
 4. Commit and push; the [deploy](#deploying) rebuilds the site
 
 ### Site Icons
@@ -251,6 +251,7 @@ The marks survive JPEG re-saves and modest resizing. Heavy cropping can cut some
   |---|---|
   | `--year <yyyy>` | year (required, except with `--about`) |
   | `--project "<name>"` | project name; leave off for loose pictures |
+  | `--title "<text>"` | the piece's name, shown with the picture (one picture per run) |
   | `--desc "<text>"` | desc of a new project, or of each loose picture |
   | `--featured` | mark the project, or each loose picture added, `"featured": true` (shown in the site's Featured group); never unmarks |
   | `--original-price <dollars>` | put each new picture's original up for sale at this price (`"sale": { "original": { "price": 300, "sold": false } }`) |

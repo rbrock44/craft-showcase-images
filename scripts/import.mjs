@@ -10,7 +10,7 @@
  *   <YYYY>/picture.jpg                loose picture for that year
  *   <YYYY>/<Project Name>/picture.jpg picture in that project, that year
  *   <project folder>/description.txt  project description (when the project is new or has none)
- *   picture.txt next to picture.jpg   that picture's description
+ *   picture.txt next to picture.jpg   that picture's title (first line) and description (any lines after it)
  *   Imported/                         where finished originals go; never read
  *
  * Usage:
@@ -278,16 +278,21 @@ function scanPictureFolder(folder, relative, { allowDescription, allowSubfolders
   for (const name of files.filter(isImageFile).sort((a, b) => a.localeCompare(b))) {
     const base = path.parse(name).name.toLowerCase();
     const textName = textFiles.get(`${base}.txt`) ?? textFiles.get(`${name.toLowerCase()}.txt`);
+    let title = '';
     let desc = '';
     if (textName) {
       usedText.add(textName.toLowerCase());
-      desc = readText(path.join(folder, textName));
+      // First line: the piece's title; anything after it: its description
+      const [first = '', ...rest] = readText(path.join(folder, textName)).split(/\r?\n/);
+      title = first.trim();
+      desc = rest.join('\n').trim();
     }
     pictures.push({
       source: path.join(folder, name),
       relative: path.join(relative, name),
       textFile: textName ? path.join(folder, textName) : null,
       textRelative: textName ? path.join(relative, textName) : null,
+      title,
       desc,
     });
   }
@@ -513,10 +518,10 @@ async function run(prompt) {
     for (const group of toImport) {
       if (group.project !== null && group.projectDesc) described.push(`the project '${group.project}'`);
       for (const picture of group.pictures) {
-        if (picture.status === 'new' && picture.desc) described.push(path.basename(picture.source));
+        if (picture.status === 'new' && (picture.title || picture.desc)) described.push(path.basename(picture.source));
       }
     }
-    if (described.length > 0) console.log(`  - With a description: ${listInWords(described)}.`);
+    if (described.length > 0) console.log(`  - With a title or description: ${listInWords(described)}.`);
     for (const note of allNotes) console.log(`  - ${note}`);
     console.log('');
     const go = options.yes || (await prompt.yesNo('Go ahead?'));
@@ -544,6 +549,7 @@ async function run(prompt) {
               destination: group.destination,
               settings,
               workDir: workDir.dir,
+              title: picture.title,
               desc: picture.desc,
             });
             created.push(...files);
