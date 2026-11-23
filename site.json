@@ -1,0 +1,11 @@
+{
+  "title": "Craft Showcase",
+  "url": "https://craft-showcase.ryan-brock.com",
+  "description": "A sample gallery showing what a Craft Showcase site looks like.",
+  "projectNoun": "project",
+  "photoNoun": "piece",
+  "directoryUrl": null,
+  "watermarkText": "Craft Showcase",
+  "idPrefix": "CS",
+  "repo": "rbrock44/craft-showcase-images"
+}

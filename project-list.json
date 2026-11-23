@@ -1,0 +1,97 @@
+{
+  "projectsByYear": [
+    {
+      "year": "2026",
+      "projects": [
+        {
+          "name": "Sample Sketches",
+          "desc": "Sample pieces showing outlined, filled and sketch-bordered lettering.",
+          "images": [
+            {
+              "name": "sample-bold-wide",
+              "desc": "",
+              "url": "/images/2026/sample-sketches/sample-bold-wide.jpg",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "name": "sample-outline-tall",
+              "desc": "",
+              "url": "/images/2026/sample-sketches/sample-outline-tall.jpg",
+              "width": 1200,
+              "height": 1600
+            },
+            {
+              "name": "sample-sketch-border",
+              "desc": "",
+              "url": "/images/2026/sample-sketches/sample-sketch-border.jpg",
+              "width": 1600,
+              "height": 1600
+            }
+          ]
+        }
+      ],
+      "images": [
+        {
+          "name": "sample-narrow",
+          "desc": "",
+          "url": "/images/2026/sample-narrow.jpg",
+          "width": 457,
+          "height": 1600
+        },
+        {
+          "name": "sample-script",
+          "desc": "",
+          "url": "/images/2026/sample-script.jpg",
+          "width": 1600,
+          "height": 1244
+        }
+      ]
+    },
+    {
+      "year": "2025",
+      "projects": [],
+      "images": [
+        {
+          "name": "sample-sizes-wide",
+          "desc": "",
+          "url": "/images/2025/sample-sizes-wide.jpg",
+          "width": 1600,
+          "height": 914
+        },
+        {
+          "name": "sample-stamp",
+          "desc": "",
+          "url": "/images/2025/sample-stamp.jpg",
+          "width": 1500,
+          "height": 1500
+        }
+      ]
+    },
+    {
+      "year": "2024",
+      "projects": [
+        {
+          "name": "Sample Studies",
+          "desc": "Two small lettering studies.",
+          "images": [
+            {
+              "name": "sample-study-small",
+              "desc": "",
+              "url": "/images/2024/sample-studies/sample-study-small.jpg",
+              "width": 1200,
+              "height": 900
+            },
+            {
+              "name": "sample-study-tall",
+              "desc": "",
+              "url": "/images/2024/sample-studies/sample-study-tall.jpg",
+              "width": 1200,
+              "height": 1600
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
