@@ -1,10 +1,11 @@
 # Craft Showcase Images
 
-Private gallery repo for the Craft Showcase sample site (craft-showcase.ryan-brock.com), and the
+Public gallery repo for the Craft Showcase sample site (craft-showcase.ryan-brock.com), and the
 template every new person's gallery repo is copied from (see README "Making a Gallery for Someone
 New"). The site code is the private repo `craft-showcase`; its Cloudflare Pages build clones this
-repo (`GALLERY_REPO` / `GALLERY_TOKEN`), copies `site.json` to its `site.config.json`, reads
-`project-list.json`, and serves the pictures itself from `/images/...`.
+repo (`GALLERY_REPO`; no `GALLERY_TOKEN` needed since this repo is public), copies `site.json` to
+its `site.config.json`, reads `project-list.json`, and serves the pictures itself from `/images/...`.
+Galleries copied from it for real people are private and do need `GALLERY_TOKEN`.
 
 Keep the scripts, launchers and workflow here in step with the other gallery repos copied
 from it: a fix made in one belongs in all of them.

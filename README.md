@@ -1,6 +1,6 @@
 # Craft Showcase Images
 
-> The sample gallery behind [craft-showcase.ryan-brock.com](https://craft-showcase.ryan-brock.com), and the template to copy when making a gallery for someone new.
+> The public sample gallery behind [craft-showcase.ryan-brock.com](https://craft-showcase.ryan-brock.com), and the template to copy when making a gallery for someone new.
 
 ## 📚 Table of Contents
 
@@ -24,8 +24,8 @@
 
 This repo does two jobs:
 
-- **The sample site's gallery.** Its "Sample" pictures (watermarked `© Craft Showcase`) are what [craft-showcase.ryan-brock.com](https://craft-showcase.ryan-brock.com) shows, to demonstrate what a Craft Showcase site looks like.
-- **The template for new galleries.** Every person with a Craft Showcase site gets their own private gallery repo copied from this one (see [Making a Gallery for Someone New](#making-a-gallery-for-someone-new)).
+- **The sample site's gallery.** Its "Sample" pictures (watermarked `© Craft Showcase`) are what [craft-showcase.ryan-brock.com](https://craft-showcase.ryan-brock.com) shows, to demonstrate what a Craft Showcase site looks like. This repo is **public**, so the sample site's Cloudflare build clones it with just `GALLERY_REPO` and no `GALLERY_TOKEN`.
+- **The template for new galleries.** Every person with a Craft Showcase site gets their own **private** gallery repo copied from this one (see [Making a Gallery for Someone New](#making-a-gallery-for-someone-new)).
 
 The site code lives in a separate private repo ([craft-showcase](https://github.com/rbrock44/craft-showcase)); its Cloudflare Pages build clones this gallery and serves the pictures itself from `/images/...`, using `site.json` for the site's settings and `project-list.json` for what to show.
 
