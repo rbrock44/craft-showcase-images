@@ -65,7 +65,8 @@
           "desc": "",
           "url": "/images/2025/sample-stamp.jpg",
           "width": 1500,
-          "height": 1500
+          "height": 1500,
+          "featured": true
         }
       ]
     },
@@ -75,6 +76,7 @@
         {
           "name": "Sample Studies",
           "desc": "Two small lettering studies.",
+          "featured": true,
           "images": [
             {
               "name": "sample-study-small",

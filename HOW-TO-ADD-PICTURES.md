@@ -7,6 +7,7 @@
 - [Adding Pictures](#-adding-pictures)
 - [How to Set Up the Folder](#-how-to-set-up-the-folder)
 - [Adding Descriptions](#-adding-descriptions)
+- [Featuring Work](#-featuring-work)
 - [If Something Goes Wrong](#-if-something-goes-wrong)
 - [First-Time Setup (Ryan Does This)](#-first-time-setup-ryan-does-this)
 
@@ -69,6 +70,14 @@ Descriptions are optional.
 - **For one picture:** make a text file with the **same name as the picture**, like `card-1.txt` for `card-1.jpg`.
 
 To make a text file: right-click inside the folder, choose **New → Text Document**, type the name, then open it and type.
+
+---
+
+## ⭐ Featuring Work
+
+The website's home page can show a **Featured** group with the work you're proudest of. To feature a project or a picture, tell Ryan which one. Importing doesn't feature anything by itself.
+
+For Ryan: add `--featured` when running `add-images.mjs`, or put `"featured": true` on the project or picture in `project-list.json`. `"featured"` in `site.json` moves the group above or below Favorites, or turns it off.
 
 ---
 

@@ -66,6 +66,7 @@ Setup.cmd                  one-time PC setup
   "projectNoun": "project",
   "photoNoun": "piece",
   "directoryUrl": null,
+  "featured": "above",
   "watermarkText": "Craft Showcase",
   "idPrefix": "CS",
   "repo": "rbrock44/craft-showcase-images"
@@ -73,11 +74,12 @@ Setup.cmd                  one-time PC setup
 ```
 
 - `title`, `url`, `description`, `projectNoun`, `photoNoun`, `directoryUrl` - used by the site
+- `featured` - the home page's Featured group: `"above"` or `"below"` Favorites, or `"off"` to hide it (missing means `"above"`). It only shows when something is featured
 - `watermarkText` - the text stamped on every picture
 - `idPrefix` - start of each picture's hidden id (`CS-1a2b3c4d`)
 - `repo` - this repo; `setup.ps1` names the deploy key, ssh alias and clone folder after it
 
-Each picture entry in `project-list.json` is `{ name, desc, url, width, height }`, with `url` root-relative (`/images/2026/sample-sketches/owl.jpg`) and width/height the published `.jpg`'s size.
+Each picture entry in `project-list.json` is `{ name, desc, url, width, height }`, with `url` root-relative (`/images/2026/sample-sketches/owl.jpg`) and width/height the published `.jpg`'s size. A project, or a loose picture, with `"featured": true` is also listed in the site's Featured group; set it with `add-images.mjs --featured` or by hand.
 
 ### Double-Click Import
 
@@ -150,6 +152,7 @@ The marks survive JPEG re-saves and modest resizing. Heavy cropping can cut some
   | `--year <yyyy>` | year (required) |
   | `--project "<name>"` | project name; leave off for loose pictures |
   | `--desc "<text>"` | desc of a new project, or of each loose picture |
+  | `--featured` | mark the project, or each loose picture added, `"featured": true` (shown in the site's Featured group); never unmarks |
   | `--root <folder>` | gallery folder with `site.json`, `project-list.json`, `images/` (default: this repo) |
   | `--data <path>` | JSON file to update instead of `<root>/project-list.json` |
   | `--dry-run` | print what would happen, write nothing |
@@ -158,6 +161,7 @@ The marks survive JPEG re-saves and modest resizing. Heavy cropping can cut some
   - `node scripts/add-images.mjs --year 2025 --project "Barn Owl" --desc "Pencil study" "C:\Users\rbroc\Downloads\Owl"`
   - `node scripts/add-images.mjs --year 2025 "C:\Users\rbroc\Downloads\sketch.jpg"`
   - `node scripts/add-images.mjs --root ..\other-gallery-images --year 2025 "C:\Users\rbroc\Downloads\Samples"`
+  - `node scripts/add-images.mjs --year 2025 --project "Barn Owl" --featured "C:\Users\rbroc\Downloads\Owl"`
 
 #### import.mjs
 - The [double-click import](#double-click-import), run by `Import Pictures.cmd`

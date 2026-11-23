@@ -13,10 +13,11 @@ from it: a fix made in one belongs in all of them.
 ## Layout
 
 - `site.json` - site + watermark settings: `title`, `url`, `description`, `projectNoun`,
-  `photoNoun`, `directoryUrl`, `watermarkText`, `idPrefix`, `repo` (`rbrock44/craft-showcase-images`)
+  `photoNoun`, `directoryUrl`, `featured` (`"above"`/`"below"`/`"off"`: where the Featured group sits relative to Favorites; missing means `"above"`), `watermarkText`, `idPrefix`, `repo` (`rbrock44/craft-showcase-images`)
 - `project-list.json` - the picture list; image urls are root-relative `/images/<year>/[<slug>/]<name>.jpg`
 - `images/<year>/<project-slug>/<name>.jpg|-mid.webp|-thumb.webp` - a project's pictures
 - `images/<year>/<name>.jpg|...` - loose pictures for that year, not in a project; in `project-list.json` each one's optional `after` names the project it's listed after on the site (none: before every project). `add-images.mjs` sets it to the year's newest project when the picture is added
+- `"featured": true` on a project or a loose picture lists it in the site's Featured group too; `add-images.mjs --featured` sets it (never unsets), the double-click import doesn't
 - `scripts/add-images.mjs` - picture processing + JSON update; a CLI and a module of exported functions
 - `scripts/import.mjs` - double-click import from `Documents/To_Import` (run by `Import Pictures.cmd`);
   imports add-images.mjs's functions, never shells out to it
@@ -31,7 +32,7 @@ from it: a fix made in one belongs in all of them.
 ## Commands
 
 ```bash
-node scripts/add-images.mjs --year 2025 [--project "Name"] [--desc "..."] [--root <gallery>] [--data <json>] [--dry-run] <file-or-folder>...
+node scripts/add-images.mjs --year 2025 [--project "Name"] [--desc "..."] [--featured] [--root <gallery>] [--data <json>] [--dry-run] <file-or-folder>...
 node scripts/import.mjs [--folder <path>] [--yes] [--no-publish]
 node scripts/reveal-watermark.mjs <file> [out]
 powershell -ExecutionPolicy Bypass -File scripts/setup.ps1 -WhatIf

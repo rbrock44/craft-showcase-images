@@ -8,7 +8,7 @@
  *   <name>-thumb.webp 400px wide, quality 75, made from the watermarked full copy
  *
  * Usage:
- *   node scripts/add-images.mjs --year 2025 [--project "Barn Owl"] [--desc "..."]
+ *   node scripts/add-images.mjs --year 2025 [--project "Barn Owl"] [--desc "..."] [--featured]
  *        [--root <gallery folder>] [--data <path/to/project-list.json>] [--dry-run] <file-or-folder>...
  *
  * Settings (watermark text, id prefix) come from <root>/site.json; root defaults to this repo.
@@ -43,12 +43,13 @@ const TILED = { size: 0.045, fill: 'rgba(110,110,110,0.06)', angle: -30 };
 const HIDDEN = { size: 0.022, fill: 'rgba(128,128,128,0.02)', minCopies: 3, maxCopies: 5 };
 
 const USAGE = `Usage:
-  node scripts/add-images.mjs --year <yyyy> [--project "<name>"] [--desc "<text>"]
+  node scripts/add-images.mjs --year <yyyy> [--project "<name>"] [--desc "<text>"] [--featured]
        [--root <gallery folder>] [--data <project-list.json>] [--dry-run] <file-or-folder>...
 
   --year      year the images belong to
   --project   project name; without it the images are loose photos for that year
   --desc      project description for a new project (or the image desc for loose photos)
+  --featured  show the project (or the loose photos being added) in the site's Featured group
   --root      gallery folder holding site.json, project-list.json and images/ (default: this repo)
   --data      project-list.json to update instead of <root>/project-list.json
   --dry-run   show what would happen without writing anything`;
@@ -61,7 +62,7 @@ function fail(message) {
 }
 
 function parseArgs(argv) {
-  const options = { inputs: [], dryRun: false };
+  const options = { inputs: [], dryRun: false, featured: false };
   const valued = { '--root': 'root', '--year': 'year', '--project': 'project', '--desc': 'desc', '--data': 'data' };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
@@ -70,6 +71,8 @@ function parseArgs(argv) {
       process.exit(0);
     } else if (arg === '--dry-run') {
       options.dryRun = true;
+    } else if (arg === '--featured') {
+      options.featured = true;
     } else if (valued[arg]) {
       if (i + 1 >= argv.length) fail(`${arg} needs a value`);
       options[valued[arg]] = argv[++i];
@@ -331,9 +334,10 @@ function readSize(file) {
 /**
  * Adds images to the data, creating the year and project when missing. Only ever adds: existing
  * entries keep their place, and a project's desc is only set when it is new or still empty.
+ * With featured, the project (or each loose photo added) is marked `featured: true`; it never unmarks.
  * Returns how many images were added (ones whose url is already listed are left alone).
  */
-export function mergeIntoData(data, { year, project, desc, images }) {
+export function mergeIntoData(data, { year, project, desc, images, featured = false }) {
   year = String(year);
   if (!Array.isArray(data.projectsByYear)) data.projectsByYear = [];
   let yearEntry = data.projectsByYear.find((entry) => String(entry.year) === year);
@@ -355,6 +359,7 @@ export function mergeIntoData(data, { year, project, desc, images }) {
     } else if (desc && !projectEntry.desc) {
       projectEntry.desc = desc;
     }
+    if (featured) projectEntry.featured = true;
     if (!Array.isArray(projectEntry.images)) projectEntry.images = [];
     target = projectEntry.images;
   } else {
@@ -369,7 +374,9 @@ export function mergeIntoData(data, { year, project, desc, images }) {
   let added = 0;
   for (const image of images) {
     if (target.some((existing) => existing.url === image.url)) continue;
-    target.push(after ? { ...image, after } : image);
+    const entry = after ? { ...image, after } : { ...image };
+    if (featured && target === yearEntry.images) entry.featured = true;
+    target.push(entry);
     added++;
   }
   return added;
@@ -424,7 +431,7 @@ function main() {
   }
 
   if (images.length > 0) {
-    const added = mergeIntoData(data, { year: options.year, project: options.project, desc: options.desc, images });
+    const added = mergeIntoData(data, { year: options.year, project: options.project, desc: options.desc, images, featured: options.featured });
     if (!options.dryRun) writeData(dataPath, data);
     console.log(`${options.dryRun ? 'Would add' : 'Added'} ${added} entr${added === 1 ? 'y' : 'ies'} to ${dataPath}`);
   }

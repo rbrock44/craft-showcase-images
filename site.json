@@ -5,6 +5,7 @@
   "projectNoun": "project",
   "photoNoun": "piece",
   "directoryUrl": null,
+  "featured": "above",
   "watermarkText": "Craft Showcase",
   "idPrefix": "CS",
   "repo": "rbrock44/craft-showcase-images"
