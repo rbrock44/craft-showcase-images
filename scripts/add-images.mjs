@@ -3,7 +3,7 @@
  * Adds drawings to this gallery: writes them under images/ and lists them in project-list.json.
  *
  * For every input image it writes three files:
- *   <name>.jpg        full copy: long edge capped at 1600px, metadata stripped, watermarked, quality 80
+ *   <name>.jpg        full copy: long edge capped at 1200px, metadata stripped, watermarked, quality 80
  *   <name>-mid.webp   fits 1200x1200, quality 80, made from the watermarked full copy
  *   <name>-thumb.webp 400px wide, quality 75, made from the watermarked full copy
  *
@@ -36,7 +36,7 @@ const IMAGES_FOLDER = 'images';
 const IMAGES_URL = '/images';
 const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png']);
 
-const FULL_MAX_EDGE = 1600;
+const FULL_MAX_EDGE = 1200;
 const FULL_QUALITY = 80;
 const MID_BOX = 1200;
 const MID_QUALITY = 80;

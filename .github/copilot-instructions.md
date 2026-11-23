@@ -55,7 +55,7 @@ same from PowerShell or Git Bash. `--root` points add-images at another gallery 
 - Never commit untouched originals. Only the three processed files per picture belong here
   (one file per About photo under `images/about/`).
   `.gitignore` blocks `originals/` and `*.orig.*`
-- Every published `.jpg` is: auto-oriented, long edge <= 1600px (never upscaled), metadata
+- Every published `.jpg` is: auto-oriented, long edge <= 1200px (never upscaled), metadata
   stripped, watermarked, JPEG quality 80, id in the JPEG comment. Low res on purpose so prints
   get ordered, not printed from the download
 - `-mid.webp` (fit 1200x1200, q80) and `-thumb.webp` (400px wide, q75) are made from the

@@ -49,7 +49,7 @@ images/
 ├── about/                 photos about.md shows (resized, not watermarked)
 ├── 2026/
 │   ├── sample-sketches/   a project (folder = project name slugified)
-│   │   ├── owl.jpg        full copy (watermarked, long edge <= 1600px)
+│   │   ├── owl.jpg        full copy (watermarked, long edge <= 1200px)
 │   │   ├── owl-mid.webp   fits 1200x1200
 │   │   └── owl-thumb.webp 400px wide
 │   └── loose-sketch.jpg   loose picture for the year, not in any project
@@ -214,7 +214,7 @@ Every full copy gets three layers, all sized from the picture's short edge (or h
 - The hidden copies sit in the clear bands between rows of the tiled text, at spots picked by a generator seeded with the id, so re-running gives the same result
 - The id is also written into the JPEG comment (`© Craft Showcase CS-1a2b3c4d`), though anyone re-saving the picture will likely lose that
 
-**Why 1600px and quality 80?** The published copy looks good on a screen but is deliberately not print quality, so anyone wanting a print orders one instead of printing the download. Pictures smaller than 1600px are never upscaled.
+**Why 1200px and quality 80?** The published copy looks good on a screen but is deliberately not print quality: even the smallest print sold, a 4x6, needs about 1800px, so anyone wanting a print orders one instead of printing the download. Pictures smaller than 1200px are never upscaled.
 
 ### Checking a Suspected Copy
 
