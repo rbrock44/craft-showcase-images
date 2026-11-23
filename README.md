@@ -118,7 +118,8 @@ Off until `site.json`'s `shop.enabled` is `true`; with it off (or no `shop` at a
   "presets": {
     "standard": ["print-4x6", "print-5x7", "print-8x10", "sticker-3in", "poster-11x17", "poster-18x24", "poster-24x36"],
     "large": ["print-11x14", "canvas-16x20"],
-    "cards": ["card-pack-5"]
+    "cards": ["card-pack-5"],
+    "original-only": []
   },
   "defaultPreset": "standard"
 }
@@ -126,7 +127,7 @@ Off until `site.json`'s `shop.enabled` is `true`; with it off (or no `shop` at a
 
 - `variants` - every kind of copy that can be ordered, by id, each with its standard price. Ids are lowercase letters, numbers and dashes; keep them stable (payment links get matched to them later). `original` is reserved
 - `oversize` - optional `true` on a variant (posters) or an original: it ships at the higher shipping rate
-- `presets` - named lists of variant ids, so a picture can say `"large"` instead of listing variants. A preset name can't also be a variant id
+- `presets` - named lists of variant ids, so a picture can say `"large"` instead of listing variants. A preset name can't also be a variant id. An empty list like `"original-only": []` offers no copies: only the original is for sale, for one-of-a-kind work (a carved or built piece). Make it `defaultPreset` and every piece is original-only unless it says otherwise
 - `defaultPreset` - what a picture offers when it says nothing about copies (missing: every variant)
 - `orderEmail` - optional; when set each option gets an **Ask to order** email link prefilled with the site, the picture, its year and project, and the option. Without it the site shows the prices and "Ordering coming soon"
 - `preview` - optional, only while `enabled` is false: `true` shows visitors a **Shop preview** switch that turns on example prices in every piece's single view, with no way to buy and a note saying nothing is for sale (the sample site uses it; leave it out for a real maker until they want it)
@@ -154,7 +155,7 @@ A picture's optional `sale` in `project-list.json` (project pictures and loose p
 - `copyPrices` - this picture's price for a variant by id, instead of the standard one. A variant's `checkoutUrl` isn't used when its price is overridden here, since that link charges the standard price
 - A picture with no `sale` offers the default preset's copies once the shop is on
 
-The sample data has one of each: `sample-bold-wide` (original $300 for sale, default copies), `sample-outline-tall` (original $225 sold, `"large"` copies) and `sample-stamp` (a preset, a variant id and a one-off 12x12 print, with the 8x10 at $30).
+The sample data has one of each: `sample-bold-wide` (original $300 for sale, default copies), `sample-outline-tall` (original $225 sold, `"large"` copies), `sample-sketch-border` (original $450, `"original-only"`, no copies) and `sample-stamp` (a preset, a variant id and a one-off 12x12 print, with the 8x10 at $30).
 
 ### Double-Click Import
 

@@ -84,7 +84,8 @@
       ],
       "cards": [
         "card-pack-5"
-      ]
+      ],
+      "original-only": []
     },
     "defaultPreset": "standard"
   },

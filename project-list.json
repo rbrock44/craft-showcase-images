@@ -39,7 +39,13 @@
               "desc": "",
               "url": "/images/2026/sample-sketches/sample-sketch-border.jpg",
               "width": 1600,
-              "height": 1600
+              "height": 1600,
+              "sale": {
+                "original": {
+                  "price": 450
+                },
+                "copies": "original-only"
+              }
             }
           ]
         }
