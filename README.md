@@ -100,6 +100,8 @@ Off until `site.json`'s `shop.enabled` is `true`; with it off (or no `shop` at a
   "enabled": false,
   "currency": "USD",
   "orderEmail": "",
+  "apiUrl": "",
+  "publishableKey": "",
   "variants": {
     "print-5x7": { "name": "5x7 print", "price": 15 },
     "print-8x10": { "name": "8x10 print", "price": 25, "checkoutUrl": "" },
@@ -120,6 +122,13 @@ Off until `site.json`'s `shop.enabled` is `true`; with it off (or no `shop` at a
 - `presets` - named lists of variant ids, so a picture can say `"large"` instead of listing variants. A preset name can't also be a variant id
 - `defaultPreset` - what a picture offers when it says nothing about copies (missing: every variant)
 - `orderEmail` - optional; when set each option gets an **Ask to order** email link prefilled with the site, the picture, its year and project, and the option. Without it the site shows the prices and "Ordering coming soon"
+- `preview` - optional, only while `enabled` is false: `true` shows visitors a **Shop preview** switch that turns on example prices in every piece's single view, with no way to buy and a note saying nothing is for sale (the sample site uses it; leave it out for a real maker until they want it)
+- `apiUrl` - optional `https://` address of the shop backend (e.g. a Cloudflare Worker). With it (and `enabled`), options with no `checkoutUrl` get **Add to cart** (copies with a quantity, an original only once), a cart button appears in the top bar, and **Checkout** sends the cart to the backend. The backend serves:
+  - `GET <apiUrl>/availability?pictures=<key>,<key>` -> `{ "<key>": { "original": true|false } }`: asked when a piece with an original opens, when the cart opens and before checkout; a sold original shows **Sold** and leaves the cart
+  - `POST <apiUrl>/checkout` with `{ site, publishableKey?, items: [{ picture, offer, quantity }] }` -> `{ "url": "https://..." }` (the payment page), or `409 { "unavailable": [{ picture, offer }] }` when something sold meanwhile
+  - It must look prices and availability up itself (never trust the browser) and sell an original once
+- `publishableKey` - optional browser-safe key passed to the backend (e.g. Stripe's `pk_...`)
+- **Secret keys never go here.** `site.json` is published with the site. Payment secret keys, webhook secrets and API tokens go in the backend Worker's secrets (`npx wrangler secret put STRIPE_SECRET_KEY --name <worker>`). The build stops if `site.json` has `apiKey`, `secretKey`, `token` or `apiToken`, or a `publishableKey` that looks secret (`sk_`, `rk_`, `whsec_`)
 - `checkoutUrl` - optional payment link (e.g. a Stripe Payment Link) on a variant or an original; when set the option shows **Buy** and links there, with `?client_reference_id=<year>_<project-slug>_<name>` added so the payment says which picture. Empty means none
 
 A picture's optional `sale` in `project-list.json` (project pictures and loose pictures alike):

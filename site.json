@@ -14,8 +14,11 @@
   },
   "shop": {
     "enabled": false,
+    "preview": true,
     "currency": "USD",
     "orderEmail": "",
+    "apiUrl": "",
+    "publishableKey": "",
     "variants": {
       "print-5x7": {
         "name": "5x7 print",
