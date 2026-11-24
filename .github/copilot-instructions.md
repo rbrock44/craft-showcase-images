@@ -31,8 +31,10 @@ from it: a fix made in one belongs in all of them.
 - The root `.cmd` launchers work double-clicked or from a prompt: they `pause` only when
   double-clicked (found by their name in `%cmdcmdline%`) and exit with the script's exit code
 - `scripts/reveal-watermark.mjs` - contrast-stretched copy to read the hidden id marks
-- `.github/workflows/deploy.yml` - on push to `master`, POSTs the `CLOUDFLARE_DEPLOY_HOOK` secret
-  (skips with a notice when unset)
+- `.github/workflows/deploy.yml` - on push to `master`, first tests the gallery: checks out private
+  `rbrock44/craft-showcase` with the `SHOWCASE_TOKEN` secret and runs its `fetch-gallery` (site.json, sales,
+  pieces, about.md), tests and build with `GALLERY_DIR=../gallery`, as the Cloudflare build will. Only when that
+  passes does it POST the `CLOUDFLARE_DEPLOY_HOOK` secret. Each secret skips its part with a notice when unset
 - `HOW-TO-ADD-PICTURES.md` - plain-language guide for the person adding pictures
 
 ## Commands

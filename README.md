@@ -233,7 +233,7 @@ The marks survive JPEG re-saves and modest resizing. Heavy cropping can cut some
 
 ### Deploying
 
-`.github/workflows/deploy.yml` runs on every push to `master` and POSTs to the Cloudflare Pages deploy hook stored in the repo secret `CLOUDFLARE_DEPLOY_HOOK`. Cloudflare then builds craft-showcase, which clones this gallery. Without the secret the workflow skips with a notice.
+`.github/workflows/deploy.yml` runs on every push to `master`. It first tests this gallery the way the site build will use it: it checks out craft-showcase with the repo secret `SHOWCASE_TOKEN` and runs its gallery checks, tests and build against this repo. A mistake (a bad sale, a missing setting) fails there, in this repo's Actions, and nothing is deployed. When it passes, it POSTs to the Cloudflare deploy hook stored in the repo secret `CLOUDFLARE_DEPLOY_HOOK`. Cloudflare then builds craft-showcase, which clones this gallery. Without either secret, its part skips with a notice.
 
 ### List of Scripts
 
@@ -306,6 +306,7 @@ This repo is the template: start every new gallery from it.
    - `GALLERY_TOKEN` - a fine-grained GitHub token with read-only Contents access to that repo
 6. Add the custom domain (`<name>.ryan-brock.com`) to the Pages project
 7. In the Pages project's settings, create a deploy hook and save its URL in the new repo as the Actions secret `CLOUDFLARE_DEPLOY_HOOK`
+8. Save a fine-grained GitHub token with read-only Contents access to `rbrock44/craft-showcase` in the new repo as the Actions secret `SHOWCASE_TOKEN`, so each push is tested before it deploys
 
 ---
 

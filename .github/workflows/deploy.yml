@@ -1,17 +1,83 @@
 name: Deploy
 
-# The site (craft-showcase) is built on Cloudflare Pages and clones this gallery at build time,
-# so a push here only needs to ask Cloudflare for a fresh build.
+# The site is built by Cloudflare from craft-showcase, which clones this gallery at build time,
+# so a push here only needs to ask Cloudflare for a fresh build. First the gallery is tested
+# against craft-showcase the way that build will use it, so a mistake (a bad sale, a missing
+# cover) fails here, in this repo's Actions, and the hook is never called.
 on:
   push:
     branches: [master]
   workflow_dispatch:
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      SHOWCASE_TOKEN: ${{ secrets.SHOWCASE_TOKEN }}
+    steps:
+      - name: Check for the craft-showcase token
+        id: token
+        run: |
+          if [ -z "$SHOWCASE_TOKEN" ]; then
+            echo "::warning::SHOWCASE_TOKEN secret is not set, so the gallery is not tested before the deploy"
+            echo "set=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "set=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout gallery
+        if: steps.token.outputs.set == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: gallery
+
+      - name: Checkout craft-showcase
+        if: steps.token.outputs.set == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: rbrock44/craft-showcase
+          ref: master
+          token: ${{ secrets.SHOWCASE_TOKEN }}
+          path: site
+
+      - name: Set up Node.js
+        if: steps.token.outputs.set == 'true'
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: site/.nvmrc
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install dependencies
+        if: steps.token.outputs.set == 'true'
+        working-directory: site
+        run: npm ci
+
+      # Checks site.json, every sale and piece, and about.md, then copies the gallery in
+      - name: Fetch Gallery
+        if: steps.token.outputs.set == 'true'
+        working-directory: site
+        env:
+          GALLERY_DIR: ../gallery
+        run: npm run fetch-gallery
+
+      - name: Run Tests
+        if: steps.token.outputs.set == 'true'
+        working-directory: site
+        run: npx ng test --watch=false
+
+      - name: Build Site
+        if: steps.token.outputs.set == 'true'
+        working-directory: site
+        env:
+          GALLERY_DIR: ../gallery
+        run: npm run build
+
   deploy:
+    needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Cloudflare Pages build
+      - name: Trigger Cloudflare build
         env:
           HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}
         run: |
