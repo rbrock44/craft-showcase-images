@@ -6,6 +6,23 @@
         {
           "name": "Sample Sketches",
           "desc": "Sample pieces showing outlined, filled and sketch-bordered lettering.",
+          "pieces": [
+            {
+              "id": "sample-001",
+              "title": "Sample 001",
+              "photos": [
+                "sample-bold-wide",
+                "sample-bold-wide-detail",
+                "sample-bold-wide-angle"
+              ],
+              "sale": {
+                "original": {
+                  "price": 300,
+                  "sold": false
+                }
+              }
+            }
+          ],
           "images": [
             {
               "name": "sample-bold-wide",
@@ -13,13 +30,21 @@
               "desc": "",
               "url": "/images/2026/sample-sketches/sample-bold-wide.jpg",
               "width": 1600,
-              "height": 1067,
-              "sale": {
-                "original": {
-                  "price": 300,
-                  "sold": false
-                }
-              }
+              "height": 1067
+            },
+            {
+              "name": "sample-bold-wide-detail",
+              "desc": "Close-up of the lettering",
+              "url": "/images/2026/sample-sketches/sample-bold-wide-detail.jpg",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "name": "sample-bold-wide-angle",
+              "desc": "The piece at an angle",
+              "url": "/images/2026/sample-sketches/sample-bold-wide-angle.jpg",
+              "width": 1200,
+              "height": 857
             },
             {
               "name": "sample-outline-tall",
